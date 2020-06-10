@@ -27,7 +27,7 @@
 
 # Import from the Standard Library
 from copy import deepcopy
-from io import StringIO
+from io import StringIO, BytesIO
 
 # Import from lxml
 from lxml.etree import parse, tostring
@@ -54,7 +54,7 @@ class odf_xmlpart(object):
         if self.__tree is None:
             container = self.container
             part = container.get_part(self.part_name)
-            self.__tree = parse(StringIO(part))
+            self.__tree = parse(BytesIO(part))
         return self.__tree
 
 
@@ -117,5 +117,5 @@ class odf_xmlpart(object):
         # Lxml with pretty_print is adding a empty line
         if pretty:
             tree = tree.strip()
-        data.append(tree)
+        data.append(tree.decode())
         return '\n'.join(data)

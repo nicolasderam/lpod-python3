@@ -226,10 +226,12 @@ def odf_create_element(element_data, cache=None):
         # repeated namespace declarations
         if type(element_data) is str:
             element_data = element_data.encode()
-        element_data = '<%s/>' % element_data
+        element_data = f'<{element_data.decode()}/>'
     # XML fragment
     if type(element_data) is str:
         element_data = element_data.encode()
+    
+    t = element_data.decode()
     data = ns_document_data % element_data
     root = fromstring(data)
     element = root[0]

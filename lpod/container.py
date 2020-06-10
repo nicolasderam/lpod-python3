@@ -30,7 +30,7 @@ import os
 import sys
 import shutil
 from copy import deepcopy
-from io import StringIO
+from io import StringIO, BytesIO
 from zipfile import ZIP_DEFLATED, ZIP_STORED, ZipFile, BadZipfile
 
 # Import from lpod
@@ -73,7 +73,7 @@ class odf_container(object):
                 printwarn ("corrupted or not an OpenDocument folder (missing mimetype)")
                 mimetype = ''
                 timestamp = None
-            if mimetype not in ODF_MIMETYPES:
+            if mimetype.decode() not in ODF_MIMETYPES:
                 message = 'Document of unknown type "%s", trying with ODF_TEXT.' % mimetype
                 printwarn(message)
                 mimetype = ODF_EXTENSIONS['odt']
@@ -95,7 +95,7 @@ class odf_container(object):
                 except ValueError:
                     raise ValueError("bad OpenDocument format")
                 self.__packaging = 'flat'
-            if mimetype not in ODF_MIMETYPES:
+            if mimetype.decode() not in ODF_MIMETYPES:
                 message = 'Document of unknown type "%s"' % mimetype
                 raise ValueError(message)
             self.__parts = {'mimetype': mimetype}
@@ -154,7 +154,7 @@ class odf_container(object):
         if self.__zipfile is None:
             data = self.__get_data()
             # StringIO will not duplicate the string, how big it is
-            filelike = StringIO(data)
+            filelike = BytesIO(data)
             self.__zipfile = ZipFile(filelike)
         return self.__zipfile
 
@@ -503,7 +503,7 @@ def odf_new_container(path_or_file):
     # Return a copy of the template container
     clone = template_container.clone()
     # Change type from template to regular
-    mimetype = clone.get_part('mimetype').replace('-template', '')
+    mimetype = clone.get_part('mimetype').decode().replace('-template', '')
     clone.set_part('mimetype', mimetype)
     # Update the manifest
     manifest = odf_manifest(ODF_MANIFEST, clone)
