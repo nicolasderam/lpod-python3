@@ -36,7 +36,7 @@ from lpod.datatype import DateTime, Duration, Boolean, Unit
 class DateTimeTestCase(TestCase):
 
     def test_encode(self):
-        date = datetime(2009, 06, 26, 11, 9, 36)
+        date = datetime(2009, 0o6, 26, 11, 9, 36)
         expected = '2009-06-26T11:09:36'
         self.assertEqual(DateTime.encode(date), expected)
 

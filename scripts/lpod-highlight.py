@@ -40,17 +40,17 @@ def highlight(odf_file_url, pattern, color=None, background_color=None,
               italic=False, bold=False, target=None, pretty=True):
 
     # Make display_name and name
-    display_name = [u"Highlight"]
+    display_name = ["Highlight"]
     if color and color != 'none':
-        display_name.append(unicode(color).capitalize())
+        display_name.append(str(color).capitalize())
     if background_color and background_color != 'none':
-        display_name.append(unicode(background_color).capitalize())
+        display_name.append(str(background_color).capitalize())
     if italic:
-        display_name.append(u"Italic")
+        display_name.append("Italic")
     if bold:
-        display_name.append(u"Bold")
-    display_name = u" ".join(display_name)
-    name = display_name.replace(u" ", u"_20_")
+        display_name.append("Bold")
+    display_name = " ".join(display_name)
+    name = display_name.replace(" ", "_20_")
 
     # Is our style already installed?
     style = document.get_style('text', name)
@@ -113,7 +113,7 @@ if  __name__ == '__main__':
         parser.print_help()
         exit(1)
     odf_file_url, pattern = args
-    pattern = unicode(pattern, stdin.encoding)
+    pattern = str(pattern, stdin.encoding)
     document = odf_get_document(odf_file_url)
     highlight(document, pattern, options.color, options.background,
             options.italic, options.bold, target=options.output)

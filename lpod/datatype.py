@@ -168,7 +168,7 @@ class Duration(object):
 class Unit(object):
 
     def __init__(self, value, unit='cm'):
-        if isinstance(value, basestring):
+        if isinstance(value, str):
             digits = []
             nondigits = []
             for char in value:

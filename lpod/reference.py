@@ -26,7 +26,7 @@
 #
 
 # Import from lpod
-from element import odf_element, odf_create_element, register_element_class
+from .element import odf_element, odf_create_element, register_element_class
 
 
 def _get_referenced(body, start, end, no_header, clean, as_xml, as_list):
@@ -68,7 +68,7 @@ class odf_reference_mark(odf_element):
 
     def get_referenced_text(self):
         "Only usefull for for subclasses."
-        return u''
+        return ''
 
 
 
@@ -82,9 +82,9 @@ class odf_reference_mark_end(odf_reference_mark):
         """
         name = self.get_name()
         args = {'name': name}
-        request = (u"//text()"
-            u"[preceding::text:reference-mark-start[@text:name='%(name)s'] "
-            u"and following::text:reference-mark-end[@text:name='%(name)s']]"
+        request = ("//text()"
+            "[preceding::text:reference-mark-start[@text:name='%(name)s'] "
+            "and following::text:reference-mark-end[@text:name='%(name)s']]"
             ) % args
         result = ' '.join(self.xpath(request))
         return result
@@ -115,7 +115,7 @@ class odf_reference_mark_start(odf_reference_mark_end):
         name = self.get_name()
         parent = self.get_parent()
         if parent is None:
-            raise ValueError, "cannot delete the root element"
+            raise ValueError("cannot delete the root element")
         body = self.get_document_body()
         if not body:
             body = parent
@@ -154,7 +154,7 @@ class odf_reference_mark_start(odf_reference_mark_end):
         name = self.get_name()
         parent = self.get_parent()
         if parent is None:
-            raise ValueError, "need some upper document part"
+            raise ValueError("need some upper document part")
         body = self.get_document_body()
         if not body:
             body = parent

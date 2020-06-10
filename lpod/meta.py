@@ -29,11 +29,11 @@
 # Import from the Standard Library
 from datetime import timedelta, date, datetime
 from decimal import Decimal
-from datatype import DateTime, Duration, Boolean, Date
+from .datatype import DateTime, Duration, Boolean, Date
 
 # Import from lpod
-from element import odf_create_element
-from xmlpart import odf_xmlpart
+from .element import odf_create_element
+from .xmlpart import odf_xmlpart
 
 
 class odf_meta(odf_xmlpart):
@@ -157,13 +157,13 @@ class odf_meta(odf_xmlpart):
         """
         if type(language) is not str:
             message = 'language must be "xx-YY" lang-COUNTRY code (RFC3066)'
-            raise TypeError, message
+            raise TypeError(message)
         # FIXME test validity?
         element = self.get_element('//dc:language')
         if element is None:
             element = odf_create_element('dc:language')
             self.get_meta_body().append(element)
-        element.set_text(unicode(language))
+        element.set_text(str(language))
 
 
     def get_modification_date(self):
@@ -336,7 +336,7 @@ class odf_meta(odf_xmlpart):
             duration -- timedelta
         """
         if type(duration) is not timedelta:
-            raise TypeError, u"duration must be a timedelta"
+            raise TypeError("duration must be a timedelta")
         element = self.get_element('//meta:editing-duration')
         if element is None:
             element = odf_create_element('meta:editing-duration')
@@ -366,9 +366,9 @@ class odf_meta(odf_xmlpart):
             cycles -- int
         """
         if type(cycles) is not int:
-            raise TypeError, u"cycles must be an int"
+            raise TypeError("cycles must be an int")
         if cycles < 1:
-            raise ValueError, "cycles must be a positive int"
+            raise ValueError("cycles must be a positive int")
         element = self.get_element('//meta:editing-cycles')
         if element is None:
             element = odf_create_element('meta:editing-cycles')
@@ -432,7 +432,7 @@ class odf_meta(odf_xmlpart):
         if element is None:
             return None
         statistic = {}
-        for key, value in element.get_attributes().iteritems():
+        for key, value in element.get_attributes().items():
             statistic[key] = int(value)
         return statistic
 
@@ -457,13 +457,13 @@ class odf_meta(odf_xmlpart):
             >>> document.set_statistic(statistic)
         """
         if type(statistic) is not dict:
-            raise TypeError, "statistic must be a dict"
+            raise TypeError("statistic must be a dict")
         element = self.get_element('//meta:document-statistic')
-        for key, value in statistic.iteritems():
+        for key, value in statistic.items():
             if type(key) is not str:
-                raise TypeError, "statistic key must be a str"
+                raise TypeError("statistic key must be a str")
             if type(value) is not int:
-                raise TypeError, "statistic value must be a int"
+                raise TypeError("statistic value must be a int")
             element.set_attribute(key, str(value))
 
 
@@ -510,26 +510,26 @@ class odf_meta(odf_xmlpart):
     def set_user_defined_metadata(self, name, value):
         if type(value) is bool:
             value_type = 'boolean'
-            value = u'true' if value else u'false'
+            value = 'true' if value else 'false'
         elif isinstance(value, (int, float, Decimal)):
             value_type = 'float'
-            value = unicode(value)
+            value = str(value)
         elif type(value) is date:
             value_type = 'date'
-            value = unicode(Date.encode(value))
+            value = str(Date.encode(value))
         elif type(value) is datetime:
             value_type = 'date'
-            value = unicode(DateTime.encode(value))
+            value = str(DateTime.encode(value))
         elif type(value) is str:
             value_type = 'string'
-            value = unicode(value)
-        elif type(value) is unicode:
+            value = str(value)
+        elif type(value) is str:
             value_type = 'string'
         elif type(value) is timedelta:
             value_type = 'time'
-            value = unicode(Duration.encode(value))
+            value = str(Duration.encode(value))
         else:
-            raise TypeError, 'unexpected type "%s" for value' % type(value)
+            raise TypeError('unexpected type "%s" for value' % type(value))
         # Already the same element ?
         for metadata in self.get_elements('//meta:user-defined'):
             if metadata.get_attribute('meta:name') == name:

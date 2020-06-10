@@ -18,27 +18,27 @@ class initial_compute:
         self.rnd_col = self.do_rnd_order(cols)
         self.py_table0 = self.populate_order()
         self.py_table = self.populate()
-        print "-" * 50
+        print("-" * 50)
 
     def do_rnd_order(self, length):
         random.seed(42)
-        order = range(length)
+        order = list(range(length))
         random.shuffle(order)
         return order
 
     def populate(self):
         random.seed(42)
-        base = range(self.cols)
+        base = list(range(self.cols))
         tab = []
-        for dummy in xrange(self.lines):
+        for dummy in range(self.lines):
             random.shuffle(base)
             tab.append(base[:])
         return tab
 
     def populate_order(self):
-        base = range(self.cols)
+        base = list(range(self.cols))
         tab = []
-        for r in xrange(self.lines):
+        for r in range(self.lines):
             tab.append([r * self.cols + base[c] for c in base ])
         return tab
 
@@ -48,7 +48,7 @@ class chrono:
 
     def delta(self):
         t1 = time.time()
-        print "%.1f sec" % (t1-self.t0)
+        print("%.1f sec" % (t1-self.t0))
 
     def value(self):
         return t1-self.t0
@@ -57,71 +57,71 @@ class chrono:
         return self.value() / base
 
 def test_append_rows(D):
-    print "Test append_row", D.lines, "rows", D.cols, "cols"
-    table = odf_create_table(u"Table")
+    print("Test append_row", D.lines, "rows", D.cols, "cols")
+    table = odf_create_table("Table")
     C = chrono()
-    for line in xrange(D.lines):
+    for line in range(D.lines):
         row = odf_create_row()
         row.set_values(D.py_table0[line])
         table.append_row(row)
     C.delta()
-    print "Size of table :", table.get_size()
+    print("Size of table :", table.get_size())
     if DEBUG:
-        print table.to_csv()
-    print "-" * 50
+        print(table.to_csv())
+    print("-" * 50)
 
 def test_set_rows(D):
-    print "Test random set_row", D.lines, "rows", D.cols, "cols"
-    table = odf_create_table(u"Table")
+    print("Test random set_row", D.lines, "rows", D.cols, "cols")
+    table = odf_create_table("Table")
     C = chrono()
-    for line in xrange(D.lines):
+    for line in range(D.lines):
         row = odf_create_row()
         row.set_values(D.py_table0[line])
         if DEBUG:
-            print D.rnd_line[line], "=>", D.py_table0[line]
+            print(D.rnd_line[line], "=>", D.py_table0[line])
 
         table.set_row(D.rnd_line[line], row)
         if DEBUG:
-            print table.to_csv()
+            print(table.to_csv())
 
     C.delta()
-    print "Size of table :", table.get_size()
+    print("Size of table :", table.get_size())
     if DEBUG:
-        print table.to_csv()
-    print "-" * 50
+        print(table.to_csv())
+    print("-" * 50)
     return table
 
 def test_swap(D, table_ini):
-    print "Test swap rows/cols from table", D.lines, "rows", D.cols, "cols"
-    table = odf_create_table(u"swapped", D.lines, D.cols)
+    print("Test swap rows/cols from table", D.lines, "rows", D.cols, "cols")
+    table = odf_create_table("swapped", D.lines, D.cols)
     C = chrono()
-    for col in xrange(D.cols):
+    for col in range(D.cols):
         values = table_ini.get_column_values(col)
         table.set_row_values(col, values)
     C.delta()
-    print "Size of swapped table :", table.get_size()
+    print("Size of swapped table :", table.get_size())
     if DEBUG:
-        print table.to_csv()
-    print "-" * 50
+        print(table.to_csv())
+    print("-" * 50)
 
 def test_swap_transpose(D, table_ini):
-    print "Test swap rows/cols with transpose ", D.lines, "rows", D.cols, "cols"
+    print("Test swap rows/cols with transpose ", D.lines, "rows", D.cols, "cols")
     if not hasattr(table_ini, 'transpose'):
-        print "method not available"
-        print "-" * 50
+        print("method not available")
+        print("-" * 50)
         return
     table = table_ini.clone()
     C = chrono()
     table.transpose()
     C.delta()
-    print "Size of swapped table :", table.get_size()
+    print("Size of swapped table :", table.get_size())
     if DEBUG:
-        print table.to_csv()
-    print "-" * 50
+        print(table.to_csv())
+    print("-" * 50)
 
 def test_random_set_value(D):
-    print "Test random set_value", D.lines, "rows", D.cols, "cols"
-    table = odf_create_table(u"Table")
+    print("Test random set_value", D.lines, "rows", D.cols, "cols")
+    table = odf_create_table("Table")
     cpt = 0
     C = chrono()
     for line in D.rnd_line:
@@ -129,15 +129,15 @@ def test_random_set_value(D):
             table.set_value((col, line), cpt)
             cpt += 1
     C.delta()
-    print cpt, "values entered"
-    print "Size of table :", table.get_size()
+    print(cpt, "values entered")
+    print("Size of table :", table.get_size())
     if DEBUG:
-        print table.to_csv()
-    print "-" * 50
+        print(table.to_csv())
+    print("-" * 50)
     return table
 
 def test_random_get_value(D, table_ini):
-    print "Test read random get_value", D.lines, "rows", D.cols, "cols"
+    print("Test read random get_value", D.lines, "rows", D.cols, "cols")
     vals = []
     cpt = 0
     C = chrono()
@@ -146,16 +146,16 @@ def test_random_get_value(D, table_ini):
             vals.append(table_ini.get_value((col, line)))
             cpt += 1
     C.delta()
-    print cpt, "values read"
+    print(cpt, "values read")
     if DEBUG:
-        print vals
-    print "-" * 50
+        print(vals)
+    print("-" * 50)
 
 def test_repeated(D):
-    print "test random repeated lines", D.lines, "rows", D.cols, "cols"
-    table = odf_create_table(u"Table")
+    print("test random repeated lines", D.lines, "rows", D.cols, "cols")
+    table = odf_create_table("Table")
     C = chrono()
-    for line in xrange(D.lines):
+    for line in range(D.lines):
         row = odf_create_row()
         row.set_values([(line * 10 + x) for x in  range(D.cols)])
         row.set_repeated(line)
@@ -163,15 +163,15 @@ def test_repeated(D):
         #    print D.rnd_line[line], "=>", row.get_values(), row.get_repeated()
         table.set_row(D.rnd_line[line], row)
     C.delta()
-    print "Size of table :", table.get_size()
+    print("Size of table :", table.get_size())
     if DEBUG:
-        print table.to_csv()
-    print "-" * 50
+        print(table.to_csv())
+    print("-" * 50)
     return table
 
 
 if __name__=="__main__":
-    print version
+    print(version)
     total = chrono()
     #for r,c  in [(10,8)]:
     for r,c  in [(10,10), (100, 10), (100,100), (1000,10)]:
@@ -184,5 +184,5 @@ if __name__=="__main__":
         t = test_random_set_value(D)
         test_random_get_value(D, t)
         test_repeated(D)
-    print "Total",
+    print("Total", end=' ')
     total.delta()

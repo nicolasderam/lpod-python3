@@ -29,10 +29,10 @@
 #
 
 # Import from the Standard Library
-from cStringIO import StringIO
+from io import StringIO
 from ftplib import FTP
 from unittest import TestCase, main
-from urllib2 import urlopen
+from urllib.request import urlopen
 
 # Import from lpod
 from lpod.const import ODF_EXTENSIONS, ODF_CONTENT, ODF_MANIFEST, ODF_META
@@ -52,22 +52,22 @@ class NewDocumentFromTemplateTestCase(TestCase):
 
     def test_text_template(self):
         path = '../lpod/templates/text.ott'
-        self.assert_(odf_new_document(path))
+        self.assertTrue(odf_new_document(path))
 
 
     def test_spreadsheet_template(self):
         path = '../lpod/templates/spreadsheet.ots'
-        self.assert_(odf_new_document(path))
+        self.assertTrue(odf_new_document(path))
 
 
     def test_presentation_template(self):
         path = '../lpod/templates/presentation.otp'
-        self.assert_(odf_new_document(path))
+        self.assertTrue(odf_new_document(path))
 
 
     def test_drawing_template(self):
         path = '../lpod/templates/drawing.otg'
-        self.assert_(odf_new_document(path))
+        self.assertTrue(odf_new_document(path))
 
 
     def test_mimetype(self):
@@ -112,12 +112,12 @@ class GetDocumentTestCase(TestCase):
 
     def test_filesystem(self):
         path = 'samples/example.odt'
-        self.assert_(odf_get_document(path))
+        self.assertTrue(odf_get_document(path))
 
 
     def test_odf_xml(self):
         path = 'samples/example.xml'
-        self.assert_(odf_get_document(path))
+        self.assertTrue(odf_get_document(path))
 
 #fixme : reactivitate ftp
 
@@ -134,22 +134,22 @@ class DocumentTestCase(TestCase):
 
     def test_get_content(self):
         content = self.document.get_part(ODF_CONTENT)
-        self.assert_(type(content) is odf_content)
+        self.assertTrue(type(content) is odf_content)
 
 
     def test_get_meta(self):
         meta = self.document.get_part(ODF_META)
-        self.assert_(type(meta) is odf_meta)
+        self.assertTrue(type(meta) is odf_meta)
 
 
     def test_get_styles(self):
         styles = self.document.get_part(ODF_STYLES)
-        self.assert_(type(styles) is odf_styles)
+        self.assertTrue(type(styles) is odf_styles)
 
 
     def test_get_manifest(self):
         manifest = self.document.get_part(ODF_MANIFEST)
-        self.assert_(type(manifest) is odf_manifest)
+        self.assertTrue(type(manifest) is odf_manifest)
 
 
     def test_get_body(self):
@@ -165,7 +165,7 @@ class DocumentTestCase(TestCase):
         self.assertNotEqual(clone._odf_document__xmlparts, {})
         parts = clone._odf_document__xmlparts
         self.assertEqual(len(parts), 1)
-        self.assertEqual(parts.keys(), ['content.xml'])
+        self.assertEqual(list(parts.keys()), ['content.xml'])
         container = clone.container
         self.assertEqual(container.path, None)
 
@@ -177,18 +177,18 @@ class DocumentTestCase(TestCase):
         temp.seek(0)
         new = odf_get_document(temp)
         generator = new.get_part(ODF_META).get_generator()
-        self.assert_(generator.startswith(u"lpOD Python"))
+        self.assertTrue(generator.startswith("lpOD Python"))
 
 
     def test_save_generator(self):
         document = self.document.clone()
-        document.get_part(ODF_META).set_generator(u"toto")
+        document.get_part(ODF_META).set_generator("toto")
         temp = StringIO()
         document.save(temp)
         temp.seek(0)
         new = odf_get_document(temp)
         generator = new.get_part(ODF_META).get_generator()
-        self.assertEqual(generator, u"toto")
+        self.assertEqual(generator, "toto")
 
 
 
@@ -236,13 +236,13 @@ class TestStyle(TestCase):
 
     def test_get_style_automatic(self):
         document = self.document
-        style = document.get_style('paragraph', u'P1')
+        style = document.get_style('paragraph', 'P1')
         self.assertNotEqual(style, None)
 
 
     def test_get_style_named(self):
         document = self.document
-        style = document.get_style('paragraph', u'Heading_20_1')
+        style = document.get_style('paragraph', 'Heading_20_1')
         self.assertNotEqual(style, None)
 
 
@@ -250,16 +250,16 @@ class TestStyle(TestCase):
         # XXX hard to unit test
         document = self.document
         all_styles = document.show_styles()
-        self.assert_(u"auto   used:" in all_styles)
-        self.assert_(u"common used:" in all_styles)
+        self.assertTrue("auto   used:" in all_styles)
+        self.assertTrue("common used:" in all_styles)
         common_styles = document.show_styles(automatic=False)
-        self.assert_(u"auto   used:" not in common_styles)
-        self.assert_(u"common used:" in common_styles)
+        self.assertTrue("auto   used:" not in common_styles)
+        self.assertTrue("common used:" in common_styles)
         automatic_styles = document.show_styles(common=False)
-        self.assert_(u"auto   used:" in automatic_styles)
-        self.assert_(u"common used:" not in automatic_styles)
+        self.assertTrue("auto   used:" in automatic_styles)
+        self.assertTrue("common used:" not in automatic_styles)
         no_styles = document.show_styles(automatic=False, common=False)
-        self.assertEqual(no_styles, u"")
+        self.assertEqual(no_styles, "")
 
 
 

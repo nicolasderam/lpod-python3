@@ -28,7 +28,7 @@
 
 # Import from lpod
 #from utils import obsolete
-from xmlpart import odf_xmlpart
+from .xmlpart import odf_xmlpart
 
 
 class odf_content(odf_xmlpart):

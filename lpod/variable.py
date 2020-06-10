@@ -26,10 +26,10 @@
 #
 
 # Import from lpod
-from datatype import Date, DateTime, Duration
-from const import ODF_META
-from utils import _set_value_and_type
-from element import odf_create_element
+from .datatype import Date, DateTime, Duration
+from .const import ODF_META
+from .utils import _set_value_and_type
+from .element import odf_create_element
 
 
 

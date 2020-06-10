@@ -56,8 +56,8 @@ class TestNote(TestCase):
 
     def test_create_note1(self):
         # With an odf_element
-        note_body = odf_create_paragraph(u'a footnote', style='Standard')
-        note = odf_create_note(note_id='note1', citation=u'1',
+        note_body = odf_create_paragraph('a footnote', style='Standard')
+        note = odf_create_note(note_id='note1', citation='1',
                                body=note_body)
         expected = self.expected.replace('<text:p>',
                                          '<text:p text:style-name="Standard">')
@@ -66,8 +66,8 @@ class TestNote(TestCase):
 
     def test_create_note2(self):
         # With an unicode object
-        note = odf_create_note(note_id='note1', citation=u'1',
-                               body=u'a footnote')
+        note = odf_create_note(note_id='note1', citation='1',
+                               body='a footnote')
         self.assertEqual(note.serialize(), self.expected)
 
 
@@ -138,10 +138,10 @@ class TestNote(TestCase):
 
 
     def test_insert_note(self):
-        note = odf_create_note(note_id='note1', citation=u"1",
-                               body=u"élément pertubateur")
-        paragraph = odf_create_paragraph(u"Un paragraphe")
-        paragraph.insert_note(note, after=u"para")
+        note = odf_create_note(note_id='note1', citation="1",
+                               body="élément pertubateur")
+        paragraph = odf_create_paragraph("Un paragraphe")
+        paragraph.insert_note(note, after="para")
         expected = ('<text:p>Un para'
                       '<text:note text:note-class="footnote" '
                         'text:id="note1">'
@@ -155,11 +155,11 @@ class TestNote(TestCase):
 
 
     def test_insert_note_inside_span(self):
-        note = odf_create_note(note_id='note1', citation=u"1",
-                               body=u"élément pertubateur")
+        note = odf_create_note(note_id='note1', citation="1",
+                               body="élément pertubateur")
         data = "<text:p>Un <text:span>para</text:span>graphe</text:p>"
         paragraph = odf_create_element(data)
-        paragraph.insert_note(note, after=u"para")
+        paragraph.insert_note(note, after="para")
         expected = ('<text:p>Un <text:span>para'
                       '<text:note text:note-class="footnote" '
                         'text:id="note1">'
@@ -173,11 +173,11 @@ class TestNote(TestCase):
 
 
     def test_insert_note_after_span(self):
-        note = odf_create_note(note_id='note1', citation=u"1",
-                               body=u"élément pertubateur")
+        note = odf_create_note(note_id='note1', citation="1",
+                               body="élément pertubateur")
         data = "<text:p>Un <text:span>para</text:span>graphe.</text:p>"
         paragraph = odf_create_element(data)
-        paragraph.insert_note(note, after=u"graphe")
+        paragraph.insert_note(note, after="graphe")
         expected = ('<text:p>Un <text:span>para</text:span>graphe'
                       '<text:note text:note-class="footnote" '
                         'text:id="note1">'
@@ -197,15 +197,15 @@ class TestNote(TestCase):
         list_with_note = odf_create_list()
         list_with_note.append_item(paragraph)
         body.append(list_with_note)
-        expected = (u"- Un paragraphe[1] d'apparence(i) banale[*].\n"
-                    u"----\n"
-                    u"[1] C'est-à-dire l'élément « text:p ».\n"
-                    u"\n"
-                    u"----\n"
-                    u"[*] Sauf qu'il est commenté !\n"
-                    u"\n"
-                    u"========\n"
-                    u"(i) Les apparences sont trompeuses !\n")
+        expected = ("- Un paragraphe[1] d'apparence(i) banale[*].\n"
+                    "----\n"
+                    "[1] C'est-à-dire l'élément « text:p ».\n"
+                    "\n"
+                    "----\n"
+                    "[*] Sauf qu'il est commenté !\n"
+                    "\n"
+                    "========\n"
+                    "(i) Les apparences sont trompeuses !\n")
         self.assertEqual(document.get_formatted_text(), expected)
 
 
@@ -219,7 +219,7 @@ class TestAnnotation(TestCase):
 
     def test_create_annotation(self):
         # Create
-        annotation = odf_create_annotation(u"Lost Dialogs", creator=u"Plato",
+        annotation = odf_create_annotation("Lost Dialogs", creator="Plato",
                 date=datetime(2009, 6, 22, 17, 18, 42))
         expected = ('<office:annotation office:name="__Fieldmark__lpod_1">'
                       '<text:p>'
@@ -237,23 +237,23 @@ class TestAnnotation(TestCase):
         self.assertEqual(len(annotations), 1)
         annotation = annotations[0]
         creator = annotation.get_dc_creator()
-        self.assertEqual(creator, u"Auteur inconnu")
+        self.assertEqual(creator, "Auteur inconnu")
         date = annotation.get_dc_date()
         self.assertEqual(date, datetime(2009, 8, 3, 12, 9, 45))
         text = annotation.get_text_content()
-        self.assertEqual(text, u"Sauf qu'il est commenté !")
+        self.assertEqual(text, "Sauf qu'il est commenté !")
 
 
     def test_get_annotation_list_author(self):
         body = self.body
-        creator = u"Auteur inconnu"
+        creator = "Auteur inconnu"
         annotations = body.get_annotations(creator=creator)
         self.assertEqual(len(annotations), 1)
 
 
     def test_get_annotation_list_bad_author(self):
         body = self.body
-        creator = u"Plato"
+        creator = "Plato"
         annotations = body.get_annotations(creator=creator)
         self.assertEqual(len(annotations), 0)
 
@@ -306,7 +306,7 @@ class TestAnnotation(TestCase):
 
     def test_get_annotation_list_author_start_date_end_date(self):
         body = self.body
-        creator = u"Auteur inconnu"
+        creator = "Auteur inconnu"
         start_date = datetime(2009, 8, 1, 0, 0, 0)
         end_date = datetime(2009, 9, 1, 0, 0, 0)
         annotations = body.get_annotations(creator=creator,
@@ -317,7 +317,7 @@ class TestAnnotation(TestCase):
 
     def test_get_annotation_list_bad_author_start_date_end_date(self):
         body = self.body
-        creator = u"Plato"
+        creator = "Plato"
         start_date = datetime(2009, 6, 1, 0, 0, 0)
         end_date = datetime(2009, 7, 1, 0, 0, 0)
         annotations = body.get_annotations(creator=creator,
@@ -328,7 +328,7 @@ class TestAnnotation(TestCase):
 
     def test_get_annotation_list_author_bad_start_date_end_date(self):
         body = self.body
-        creator = u"Auteur inconnu"
+        creator = "Auteur inconnu"
         start_date = datetime(2009, 6, 23, 0, 0, 0)
         end_date = datetime(2009, 7, 1, 0, 0, 0)
         annotations = body.get_annotations(creator=creator,
@@ -338,12 +338,12 @@ class TestAnnotation(TestCase):
 
 
     def test_insert_annotation(self):
-        text = u"It's like you're in a cave."
-        creator = u"Plato"
+        text = "It's like you're in a cave."
+        creator = "Plato"
         date = datetime(2009, 8, 19)
         annotation = odf_create_annotation(text, creator=creator, date=date)
-        paragraph = odf_create_paragraph(u"Un paragraphe")
-        paragraph.insert_annotation(annotation, after=u"para")
+        paragraph = odf_create_paragraph("Un paragraphe")
+        paragraph.insert_annotation(annotation, after="para")
         expected = ('<text:p>Un para'
                       '<office:annotation office:name="__Fieldmark__lpod_1">'
                         '<text:p>It\'s like you\'re in a cave.</text:p>'

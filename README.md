@@ -1,4 +1,4 @@
-lpod-python
+lpod-python3
 ===========
 
 Python library implementing the ISO/IEC 26300 OpenDocument Format standard.
@@ -18,12 +18,11 @@ Maintained branches are:
 
 The most recent version of this package is there:
 
-    https://github.com/lpod/lpod-python
+    https://github.com/gosha20777/lpod-python3
 
 How to get the code with git:
 
-    git clone git://github.com/lpod/lpod-python.git
-    git checkout current
+    git clone https://github.com/gosha20777/lpod-python3.git
 
 
 Documentation: see the ./documentation/html folder.
@@ -48,6 +47,6 @@ About the Lpod Project, see:
     http://lpod-project.net
 
 
-Architect: Jean-Marie GouarnŽ <jean-marie.gouarne@arsaperta.com>
+Architect: Jean-Marie Gouarnï¿½ <jean-marie.gouarne@arsaperta.com>
 
 Coordinator: Luis Belmar-Letelier <luis@itaapy.com>

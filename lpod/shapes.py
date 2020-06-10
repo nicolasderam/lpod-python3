@@ -26,7 +26,7 @@
 #
 
 # Import from lpod
-from element import odf_element, odf_create_element, register_element_class
+from .element import odf_element, odf_create_element, register_element_class
 
 
 def _odf_create_shape(type, style=None, text_style=None, shape_id=None,
@@ -301,8 +301,8 @@ class odf_shape(odf_element):
         result = []
         for child in self.get_children():
             result.append(child.get_formatted_text(context))
-        result.append(u"\n")
-        return u"".join(result)
+        result.append("\n")
+        return "".join(result)
 
 
 

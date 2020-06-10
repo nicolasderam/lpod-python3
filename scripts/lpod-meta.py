@@ -59,7 +59,7 @@ def set_metadata(doc, set_list):
                     date = DateTime.decode(value)
                 else:
                     date = Date.decode(value)
-            except ValueError, error:
+            except ValueError as error:
                 printerr('Bad argument -s "%s": %s' % (set_info, error))
                 exit(1)
             func = meta.__getattribute__('set_' + name)
@@ -102,4 +102,4 @@ if  __name__ == '__main__':
         set_metadata(doc, options.set_list)
     else:
         # Dump
-        print doc.get_formated_meta().encode('utf-8')
+        print(doc.get_formated_meta().encode('utf-8'))

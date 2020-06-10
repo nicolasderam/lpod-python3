@@ -46,7 +46,7 @@ class TestDrawPage(TestCase):
 
 
     def test_create_complex_page(self):
-        element = odf_create_draw_page('id1', name=u"Introduction",
+        element = odf_create_draw_page('id1', name="Introduction",
                                        master_page='prs-novelty',
                                        presentation_page_layout='AL1T0',
                                        style='dp1')
@@ -74,29 +74,29 @@ class TestDrawPage(TestCase):
     def test_odf_draw_page(self):
         body = self.body
         draw_page = body.get_draw_page()
-        self.assert_(isinstance(draw_page, odf_draw_page))
+        self.assertTrue(isinstance(draw_page, odf_draw_page))
 
 
     def test_get_draw_page_by_name(self):
         body = self.body.clone()
-        good = body.get_draw_page(name=u"Titre")
+        good = body.get_draw_page(name="Titre")
         self.assertNotEqual(good, None)
-        bad = body.get_draw_page(name=u"Conclusion")
+        bad = body.get_draw_page(name="Conclusion")
         self.assertEqual(bad, None)
 
 
     def test_get_page_name(self):
         body = self.body
-        page = body.get_draw_page(name=u"Titre")
-        self.assertEqual(page.get_name(), u"Titre")
+        page = body.get_draw_page(name="Titre")
+        self.assertEqual(page.get_name(), "Titre")
 
 
     def test_set_page_name(self):
         body = self.body.clone()
         page = body.get_draw_page(position=0)
-        name = u"Intitulé"
+        name = "Intitulé"
         self.assertNotEqual(page.get_name(), name)
-        page.set_name(u"Intitulé")
+        page.set_name("Intitulé")
         self.assertEqual(page.get_name(), name)
 
 

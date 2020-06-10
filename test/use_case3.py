@@ -38,20 +38,20 @@ from lpod.style import make_table_cell_border_string
 from lpod.style import odf_create_style, rgb2hex
 
 # Hello messages
-print 'lpod installation test'
-print ' Version           : %s' %  __version__
-print ' Installation path : %s' % __installation_path__
-print
-print 'Generating test_output/use_case3.ods ...'
+print('lpod installation test')
+print(' Version           : %s' %  __version__)
+print(' Installation path : %s' % __installation_path__)
+print()
+print('Generating test_output/use_case3.ods ...')
 
 
 document = odf_new_document('spreadsheet')
 body = document.get_body()
-table = odf_create_table(u'use_case3')
+table = odf_create_table('use_case3')
 
-for y in xrange(0, 256, 8):
+for y in range(0, 256, 8):
     row = odf_create_row()
-    for x in xrange(0, 256, 32):
+    for x in range(0, 256, 32):
         cell_value = (x, y, (x+y) % 256 )
         border_rl = make_table_cell_border_string(
                                 thick = '0.20cm',

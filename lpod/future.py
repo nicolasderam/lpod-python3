@@ -28,6 +28,6 @@
 Loading his module activate the 'future' compatibility mode (aka versions 1.1+)
 """
 
-import _flags
+from . import _flags
 
 _flags.future.set(True)

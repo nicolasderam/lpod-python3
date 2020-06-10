@@ -44,7 +44,7 @@ from lpod.scriptutils import check_target_directory
 
 def clean_filename(filename):
     filename = filename.encode('utf-8')
-    allowed_characters = set([u'.', u'-', u'_', u'@'])
+    allowed_characters = set(['.', '-', '_', '@'])
     result = []
     for c in filename:
         if c not in allowed_characters and not c.isalnum():
@@ -142,8 +142,8 @@ if  __name__ == '__main__':
     if doc_type == 'text':
         result = test_document(document)
         if result is not True:
-            print 'This file is malformed: %s' % result
-            print 'Please use lpod-clean.py to fix it'
+            print('This file is malformed: %s' % result)
+            print('Please use lpod-clean.py to fix it')
             exit(1)
     if options.output:
         target = options.output

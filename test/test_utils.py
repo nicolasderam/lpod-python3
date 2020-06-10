@@ -45,14 +45,14 @@ class GenerateXPathTestCase(TestCase):
 
     def test_attribute(self):
         query = _make_xpath_query('descendant::text:p',
-                text_style=u"Standard")
+                text_style="Standard")
         self.assertEqual(query,
                          'descendant::text:p[@text:style-name="Standard"]')
 
 
     def test_two_attributes(self):
         query = _make_xpath_query('descendant::text:h',
-                text_style=u"Standard", outline_level=1)
+                text_style="Standard", outline_level=1)
         expected = ('descendant::text:h[@text:outline-level="1"]'
                     '[@text:style-name="Standard"]')
         self.assertEqual(query, expected)
@@ -65,14 +65,14 @@ class GenerateXPathTestCase(TestCase):
 
     def test_attribute_position(self):
         query = _make_xpath_query('descendant::text:p',
-                text_style=u"Standard", position=1)
+                text_style="Standard", position=1)
         self.assertEqual(query,
                 '(descendant::text:p[@text:style-name="Standard"])[2]')
 
 
     def test_two_attributes_position(self):
         query = _make_xpath_query('descendant::text:h',
-                text_style=u"Standard", outline_level=1, position=1)
+                text_style="Standard", outline_level=1, position=1)
         expected = ('(descendant::text:h[@text:outline-level="1"]'
                     '[@text:style-name="Standard"])[2]')
         self.assertEqual(query, expected)
@@ -89,12 +89,12 @@ class Get_ValueTestCase(TestCase):
 
     def test_with_variable(self):
 
-        variable_set = odf_create_variable_set(u'你好 Zoé', 42)
+        variable_set = odf_create_variable_set('你好 Zoé', 42)
         self.assertEqual(get_value(variable_set), 42)
 
 
     def test_with_user_field(self):
-        user_field_decl = odf_create_user_field_decl(u'你好 Zoé', 42)
+        user_field_decl = odf_create_user_field_decl('你好 Zoé', 42)
         self.assertEqual(get_value(user_field_decl), 42)
 
 
@@ -103,35 +103,35 @@ class Set_Get_ValueTestCase(TestCase):
 
     def test_with_cell(self):
         cell = odf_create_cell(42)
-        set_value(cell, u'你好 Zoé')
+        set_value(cell, '你好 Zoé')
         expected = ('<table:table-cell office:value-type="string" '
                       'office:string-value="%s">'
                       '<text:p>'
                         '%s'
                       '</text:p>'
                     '</table:table-cell>') % (
-                                (convert_unicode(u'你好 Zoé'),) * 2)
+                                (convert_unicode('你好 Zoé'),) * 2)
         self.assertEqual(cell.serialize(), expected)
 
 
     def test_with_variable(self):
-        variable_set = odf_create_variable_set(u'你好 Zoé', 42)
-        set_value(variable_set, u'你好 Zoé')
+        variable_set = odf_create_variable_set('你好 Zoé', 42)
+        set_value(variable_set, '你好 Zoé')
         expected = ('<text:variable-set office:value-type="string" '
                       'office:string-value="%s" text:name="%s" '
                       'text:display="none">'
                       '%s'
                     '</text:variable-set>') % (
-                            (convert_unicode(u'你好 Zoé'),) * 3)
+                            (convert_unicode('你好 Zoé'),) * 3)
         self.assertEqual(variable_set.serialize(), expected)
 
 
     def test_with_user_field(self):
-        user_field_decl = odf_create_user_field_decl(u'你好 Zoé', 42)
-        set_value(user_field_decl, u'你好 Zoé')
+        user_field_decl = odf_create_user_field_decl('你好 Zoé', 42)
+        set_value(user_field_decl, '你好 Zoé')
         expected = (('<text:user-field-decl office:value-type="string" '
                        'office:string-value="%s" text:name="%s"/>') %
-                            ((convert_unicode(u'你好 Zoé'),) * 2))
+                            ((convert_unicode('你好 Zoé'),) * 2))
         self.assertEqual(user_field_decl.serialize(), expected)
 
 
@@ -145,19 +145,19 @@ class GetElementByPositionTestCase(TestCase):
 
     def test_first(self):
         last_paragraph = self.body.get_paragraph(position=0)
-        expected = u"This is the first paragraph."
+        expected = "This is the first paragraph."
         self.assertEqual(last_paragraph.get_text(recursive=True), expected)
 
 
     def test_next_to_last(self):
         last_paragraph = self.body.get_paragraph(position=-2)
-        expected = u"This is an annotation."
+        expected = "This is an annotation."
         self.assertEqual(last_paragraph.get_text(recursive=True), expected)
 
 
     def test_last(self):
         last_paragraph = self.body.get_paragraph(position=-1)
-        expected = u"With diacritical signs: éè"
+        expected = "With diacritical signs: éè"
         self.assertEqual(last_paragraph.get_text(recursive=True), expected)
 
 
@@ -190,7 +190,7 @@ class IsIterableTestCase(TestCase):
 
 
     def test_unicode(self):
-        self.assertFalse(isiterable(u"unicode"))
+        self.assertFalse(isiterable("unicode"))
 
 
     def test_list(self):

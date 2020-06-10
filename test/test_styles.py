@@ -71,23 +71,23 @@ class TestStyle(TestCase):
 
 
     def test_get_style_automatic(self):
-        style = self.styles.get_style('page-layout', u'Mpm1')
+        style = self.styles.get_style('page-layout', 'Mpm1')
         self.assertNotEqual(style, None)
 
 
     def test_get_style_named(self):
-        style = self.styles.get_style('paragraph', u'Heading_20_1')
-        self.assertEqual(style.get_display_name(), u"Heading 1")
+        style = self.styles.get_style('paragraph', 'Heading_20_1')
+        self.assertEqual(style.get_display_name(), "Heading 1")
 
 
     def test_get_style_display_name(self):
-        style = self.styles.get_style('paragraph', display_name=u"Text body")
-        self.assertEqual(style.get_name(), u"Text_20_body")
+        style = self.styles.get_style('paragraph', display_name="Text body")
+        self.assertEqual(style.get_name(), "Text_20_body")
 
 
     def test_insert_style(self):
         styles = self.styles.clone()
-        style = odf_create_style('paragraph', u'style1', area='text',
+        style = odf_create_style('paragraph', 'style1', area='text',
                                  **{'fo:color': '#0000ff',
                                     'fo:background-color': '#ff0000'})
         context = styles.get_element('//office:styles')
@@ -98,7 +98,7 @@ class TestStyle(TestCase):
                     '  <style:text-properties fo:color="#0000ff" '
                                              'fo:background-color="#ff0000"/>\n'
                     '</style:style>\n')
-        get1 = styles.get_style('paragraph', u'style1')
+        get1 = styles.get_style('paragraph', 'style1')
         self.assertEqual(get1.serialize(pretty=True), expected)
 
 
@@ -112,9 +112,9 @@ class TestInsertStyleCase(TestCase):
     def test_insert_common_style(self):
         doc = self.doc
 
-        style = odf_create_style('paragraph', u'MyStyle')
+        style = odf_create_style('paragraph', 'MyStyle')
         doc.insert_style(style)
-        inserted_style = doc.get_style('paragraph', u'MyStyle')
+        inserted_style = doc.get_style('paragraph', 'MyStyle')
 
         self.assertEqual(style.serialize(), inserted_style.serialize())
 
@@ -122,7 +122,7 @@ class TestInsertStyleCase(TestCase):
     def test_insert_default_style(self):
         doc = self.doc
 
-        style = odf_create_style('paragraph', u'MyStyle')
+        style = odf_create_style('paragraph', 'MyStyle')
         doc.insert_style(style, default=True)
 
         inserted_style = doc.get_style('paragraph')
@@ -142,7 +142,7 @@ class TestInsertStyleCase(TestCase):
     def test_insert_with_error(self):
         doc = self.doc
 
-        style = odf_create_style('paragraph', u'MyStyle')
+        style = odf_create_style('paragraph', 'MyStyle')
         self.assertRaises(AttributeError, doc.insert_style,
                           style=style, automatic=True, default=True)
 
@@ -150,10 +150,10 @@ class TestInsertStyleCase(TestCase):
     def test_insert_master_page_style(self):
         doc = self.doc
 
-        style = odf_create_style('master-page', u'MyPageStyle')
+        style = odf_create_style('master-page', 'MyPageStyle')
         doc.insert_style(style)
 
-        inserted_style = doc.get_style('master-page',  u'MyPageStyle')
+        inserted_style = doc.get_style('master-page',  'MyPageStyle')
         self.assertEqual(style.serialize(), inserted_style.serialize())
 
 

@@ -28,13 +28,13 @@
 
 # Import from the Standard Library
 from datetime import datetime
-from datatype import DateTime
+from .datatype import DateTime
 
 # Import from lpod
-from element import register_element_class, odf_element, odf_create_element
-from element import FIRST_CHILD, LAST_CHILD
-from paragraph import odf_paragraph, odf_create_paragraph
-from utils import _get_elements, _get_element
+from .element import register_element_class, odf_element, odf_create_element
+from .element import FIRST_CHILD, LAST_CHILD
+from .paragraph import odf_paragraph, odf_create_paragraph
+from .utils import _get_elements, _get_element
 
 
 
@@ -60,7 +60,7 @@ class odf_change_info(odf_element):
             element = odf_create_element('dc:creator')
             self.insert(element, xmlposition=FIRST_CHILD)
         if not creator:
-            creator = u'Unknown'
+            creator = 'Unknown'
         element.set_text(creator)
 
 
@@ -102,7 +102,7 @@ class odf_change_info(odf_element):
             return text
 
 
-    def set_comments(self, text=u'', replace=True):
+    def set_comments(self, text='', replace=True):
         """Set the text content of the comments. If replace is True (default),
         the new text replace old comments, else it is added at the end.
 
@@ -134,7 +134,7 @@ class odf_text_insertion(odf_element):
         """Return: None.
         """
         if as_text:
-            return u''
+            return ''
         return None
 
 
@@ -305,7 +305,7 @@ class odf_text_deletion(odf_text_insertion):
         """Return None (or u'').
         """
         if as_text:
-            return u''
+            return ''
         return None
 
 
@@ -557,7 +557,7 @@ class odf_text_change_end(odf_text_change):
         end = self.get_end()
         if end is None or start is None:
             if as_text:
-                return u''
+                return ''
             return None
         body = self.get_document_body()
         if not body:

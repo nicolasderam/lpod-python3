@@ -35,7 +35,7 @@ import re
 from release import has_git, get_release
 
 g = {}
-execfile(os.path.join('lpod', '_version.py'), g)
+exec(compile(open(os.path.join('lpod', '_version.py'), "rb").read(), os.path.join('lpod', '_version.py'), 'exec'), g)
 lpod_version = g['__version__']
 
 #if has_git():
@@ -52,7 +52,7 @@ open('python_path.txt', 'w').write(executable)
 
 setup(description='lpOD Library',
       license='GPLv3 + Apache v2',
-      name='lpod-python',
+      name='lpod-python3',
       package_data={'': ['templates/*']},
       package_dir={'lpod': 'lpod'},
       scripts=scripts,

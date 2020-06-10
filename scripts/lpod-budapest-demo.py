@@ -29,9 +29,9 @@
 # Import from the standard library
 from optparse import OptionParser
 from sys import exit, stderr
-from urllib2 import urlopen, HTTPPasswordMgrWithDefaultRealm
-from urllib2 import HTTPBasicAuthHandler, build_opener
-from urlparse import urlsplit, urlunsplit
+from urllib.request import urlopen, HTTPPasswordMgrWithDefaultRealm
+from urllib.request import HTTPBasicAuthHandler, build_opener
+from urllib.parse import urlsplit, urlunsplit
 
 # Import from lpod
 from lpod import __version__, ODF_META, ODF_STYLES, ODF_MANIFEST
@@ -95,13 +95,13 @@ if  __name__ == '__main__':
 
     output_document = odf_new_document('presentation')
     output_meta = output_document.get_part(ODF_META)
-    output_meta.set_title(u"Interop Budapest Demo")
+    output_meta.set_title("Interop Budapest Demo")
 
     # Styles
     styles = output_document.get_part(ODF_STYLES)
     first_master_page = styles.get_master_page()
     if first_master_page is None:
-        raise ValueError, "no master page found"
+        raise ValueError("no master page found")
 
     for i, filename in enumerate(filenames):
         # TODO folders and collections
@@ -127,23 +127,23 @@ if  __name__ == '__main__':
             file = urlopen(filename)
         input_document = odf_get_document(file)
         # Page
-        page = odf_create_draw_page(name=u"page%d" % (i + 1),
+        page = odf_create_draw_page(name="page%d" % (i + 1),
                 master_page=first_master_page)
         # Title Frame
         title_frame = get_title_frame(first_master_page)
-        name = unicode(filename.split('/')[-1])
-        source = u"filesystem" if not scheme else scheme
-        title_frame.set_text_content(u"%s (%s)" % (name, source))
+        name = str(filename.split('/')[-1])
+        source = "filesystem" if not scheme else scheme
+        title_frame.set_text_content("%s (%s)" % (name, source))
         page.append(title_frame)
         # Get info
         info = []
         input_meta = input_document.get_part(ODF_META)
-        info.append(u"Title: %s" % input_meta.get_title())
+        info.append("Title: %s" % input_meta.get_title())
         stats = input_meta.get_statistic()
-        info.append(u"# pages: %s" % stats['meta:page-count'])
+        info.append("# pages: %s" % stats['meta:page-count'])
         input_body = input_document.get_body()
-        info.append(u"# images: %s" % len(input_body.get_images()))
-        info.append(u"# tables: %s" % len(input_body.get_tables()))
+        info.append("# images: %s" % len(input_body.get_images()))
+        info.append("# tables: %s" % len(input_body.get_tables()))
         # Outline Frame
         info_list = odf_create_list(info)
         outline_frame = get_outline_frame(first_master_page)
@@ -182,5 +182,5 @@ if  __name__ == '__main__':
         output_body.append(page)
 
     output_document.save(target, pretty=True)
-    print >> stderr
-    print >> stderr,  "%s generated" % target
+    print(file=stderr)
+    print("%s generated" % target, file=stderr)

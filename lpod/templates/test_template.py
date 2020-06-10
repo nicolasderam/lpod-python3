@@ -14,27 +14,27 @@ from lpod.template import stl_odf
 
 
 def get_namespace(homme=False):
-    return {u"titre": u"Test de STL no 1",
-            u"date": date.today().strftime(u"%d/%m/%Y"),
-            u"homme": homme,
-            u"genre": u"M." if homme else u"Mme",
-            u"nom": u"Michu",
-            u"enum1": {'label': u"Revenu", 'value': 1234.56},
-            u"enum2": {'label': u"Âge", 'value': 65},
-            u"couleur": u"rouge",
-            u"gras": u"gras comme un moine",
-            u"élément": odf_create_span(u"élément", style='T2')}
+    return {"titre": "Test de STL no 1",
+            "date": date.today().strftime("%d/%m/%Y"),
+            "homme": homme,
+            "genre": "M." if homme else "Mme",
+            "nom": "Michu",
+            "enum1": {'label': "Revenu", 'value': 1234.56},
+            "enum2": {'label': "Âge", 'value': 65},
+            "couleur": "rouge",
+            "gras": "gras comme un moine",
+            "élément": odf_create_span("élément", style='T2')}
 
 
 if __name__ == '__main__':
     try:
         output = argv[1]
     except IndexError:
-        print >>stderr, "Usage: %s <output document>" % argv[0]
+        print("Usage: %s <output document>" % argv[0], file=stderr)
         exit(1)
     document = odf_new_document('test_template.ott')
     stl_odf(document, get_namespace())
     if exists(output):
         remove(output)
     document.save(output)
-    print 'Document "%s" generated.' % output
+    print('Document "%s" generated.' % output)

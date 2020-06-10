@@ -129,28 +129,28 @@ class TestShapes(TestCase):
     def test_get_draw_line_list_regex(self):
         body = self.content.get_body()
         page = body.get_draw_page()
-        lines = page.get_draw_lines(content=ur'èche*')
+        lines = page.get_draw_lines(content=r'èche*')
         self.assertEqual(len(lines), 1)
 
 
     def test_get_draw_line_list_draw_style(self):
         body = self.content.get_body()
         page = body.get_draw_page()
-        lines = page.get_draw_lines(draw_style=ur'gr2')
+        lines = page.get_draw_lines(draw_style=r'gr2')
         self.assertEqual(len(lines), 1)
 
 
     def test_get_draw_line_list_draw_text_style(self):
         body = self.content.get_body()
         page = body.get_draw_page()
-        lines = page.get_draw_lines(draw_text_style=ur'P1')
+        lines = page.get_draw_lines(draw_text_style=r'P1')
         self.assertEqual(len(lines), 2)
 
 
     def test_get_draw_line_by_content(self):
         body = self.content.get_body()
         page = body.get_draw_page()
-        line = page.get_draw_line(content=ur'Ligne')
+        line = page.get_draw_line(content=r'Ligne')
         expected = ('<draw:line draw:style-name="gr1" '
                     'draw:text-style-name="P1" draw:layer="layout" '
                     'svg:x1="3.5cm" svg:y1="2.5cm" svg:x2="10.5cm" '
@@ -163,9 +163,9 @@ class TestShapes(TestCase):
     def test_get_draw_line_by_id(self):
         body = self.content.get_body()
         page = body.get_draw_page()
-        line = odf_create_line(shape_id=u'an id')
+        line = odf_create_line(shape_id='an id')
         page.append(line)
-        line = page.get_draw_line(id=ur'an id')
+        line = page.get_draw_line(id=r'an id')
         expected = '<draw:line draw:id="an id"/>\n'
         self.assertEqual(line.serialize(pretty=True), expected)
 
@@ -183,28 +183,28 @@ class TestShapes(TestCase):
     def test_get_draw_rectangle_list_regex(self):
         body = self.content.get_body()
         page = body.get_draw_page()
-        rectangles = page.get_draw_rectangles(content=ur'angle')
+        rectangles = page.get_draw_rectangles(content=r'angle')
         self.assertEqual(len(rectangles), 1)
 
 
     def test_get_draw_rectangle_list_draw_style(self):
         body = self.content.get_body()
         page = body.get_draw_page()
-        rectangles = page.get_draw_rectangles(draw_style=ur'gr1')
+        rectangles = page.get_draw_rectangles(draw_style=r'gr1')
         self.assertEqual(len(rectangles), 1)
 
 
     def test_get_draw_rectangle_list_draw_text_style(self):
         body = self.content.get_body()
         page = body.get_draw_page()
-        rectangles = page.get_draw_rectangles(draw_text_style=ur'P1')
+        rectangles = page.get_draw_rectangles(draw_text_style=r'P1')
         self.assertEqual(len(rectangles), 1)
 
 
     def test_get_draw_rectangle_by_content(self):
         body = self.content.get_body()
         page = body.get_draw_page()
-        rectangle = page.get_draw_rectangle(content=ur'Rect')
+        rectangle = page.get_draw_rectangle(content=r'Rect')
         expected = ('<draw:rect draw:style-name="gr1" '
                     'draw:text-style-name="P1" draw:id="id1" '
                     'draw:layer="layout" svg:width="6cm" svg:height="7cm" '
@@ -217,9 +217,9 @@ class TestShapes(TestCase):
     def test_get_draw_rectangle_by_id(self):
         body = self.content.get_body()
         page = body.get_draw_page()
-        rectangle = odf_create_rectangle(shape_id=u'an id')
+        rectangle = odf_create_rectangle(shape_id='an id')
         page.append(rectangle)
-        rectangle = page.get_draw_rectangle(id=ur'an id')
+        rectangle = page.get_draw_rectangle(id=r'an id')
         expected = ('<draw:rect draw:id="an id" svg:width="1cm" '
                     'svg:height="1cm"/>\n')
         self.assertEqual(rectangle.serialize(pretty=True), expected)
@@ -238,28 +238,28 @@ class TestShapes(TestCase):
     def test_get_draw_ellipse_list_regex(self):
         body = self.content.get_body()
         page = body.get_draw_page()
-        ellipses = page.get_draw_ellipses(content=ur'rcle')
+        ellipses = page.get_draw_ellipses(content=r'rcle')
         self.assertEqual(len(ellipses), 1)
 
 
     def test_get_draw_ellipse_list_draw_style(self):
         body = self.content.get_body()
         page = body.get_draw_page()
-        ellipses = page.get_draw_ellipses(draw_style=ur'gr1')
+        ellipses = page.get_draw_ellipses(draw_style=r'gr1')
         self.assertEqual(len(ellipses), 1)
 
 
     def test_get_draw_ellipse_list_draw_text_style(self):
         body = self.content.get_body()
         page = body.get_draw_page()
-        ellipses = page.get_draw_ellipses(draw_text_style=ur'P1')
+        ellipses = page.get_draw_ellipses(draw_text_style=r'P1')
         self.assertEqual(len(ellipses), 1)
 
 
     def test_get_draw_ellipse_by_content(self):
         body = self.content.get_body()
         page = body.get_draw_page()
-        ellipse = page.get_draw_ellipse(content=ur'Cerc')
+        ellipse = page.get_draw_ellipse(content=r'Cerc')
         expected = ('<draw:ellipse draw:style-name="gr1" '
                     'draw:text-style-name="P1" draw:id="id2" '
                     'draw:layer="layout" svg:width="4cm" svg:height="3.5cm" '
@@ -272,9 +272,9 @@ class TestShapes(TestCase):
     def test_get_draw_ellipse_by_id(self):
         body = self.content.get_body()
         page = body.get_draw_page()
-        ellipse = odf_create_ellipse(shape_id=u'an id')
+        ellipse = odf_create_ellipse(shape_id='an id')
         page.append(ellipse)
-        ellipse = page.get_draw_ellipse(id=ur'an id')
+        ellipse = page.get_draw_ellipse(id=r'an id')
         expected = ('<draw:ellipse draw:id="an id" svg:width="1cm" '
                     'svg:height="1cm"/>\n')
         self.assertEqual(ellipse.serialize(pretty=True), expected)
@@ -293,28 +293,28 @@ class TestShapes(TestCase):
     def test_get_draw_connector_list_regex(self):
         body = self.content.get_body()
         page = body.get_draw_page()
-        connectors = page.get_draw_connectors(content=ur'Con')
+        connectors = page.get_draw_connectors(content=r'Con')
         self.assertEqual(len(connectors), 1)
 
 
     def test_get_draw_connector_list_draw_style(self):
         body = self.content.get_body()
         page = body.get_draw_page()
-        connectors = page.get_draw_connectors(draw_style=ur'gr4')
+        connectors = page.get_draw_connectors(draw_style=r'gr4')
         self.assertEqual(len(connectors), 1)
 
 
     def test_get_draw_connector_list_draw_text_style(self):
         body = self.content.get_body()
         page = body.get_draw_page()
-        connectors = page.get_draw_connectors(draw_text_style=ur'P1')
+        connectors = page.get_draw_connectors(draw_text_style=r'P1')
         self.assertEqual(len(connectors), 1)
 
 
     def test_get_draw_connector_by_content(self):
         body = self.content.get_body()
         page = body.get_draw_page()
-        connector = page.get_draw_connector(content=ur'ecteur')
+        connector = page.get_draw_connector(content=r'ecteur')
         expected = ('<draw:connector draw:style-name="gr4" '
                     'draw:text-style-name="P1" draw:layer="layout" '
                     'svg:x1="11cm" svg:y1="8cm" svg:x2="15.5cm" '
@@ -330,9 +330,9 @@ class TestShapes(TestCase):
     def test_get_draw_connector_by_id(self):
         body = self.content.get_body()
         page = body.get_draw_page()
-        connector = odf_create_connector(shape_id=u'an id')
+        connector = odf_create_connector(shape_id='an id')
         page.append(connector)
-        connector = page.get_draw_connector(id=ur'an id')
+        connector = page.get_draw_connector(id=r'an id')
         expected = '<draw:connector draw:id="an id"/>\n'
         self.assertEqual(connector.serialize(pretty=True), expected)
 
@@ -341,7 +341,7 @@ class TestShapes(TestCase):
         body = self.content.get_body()
         page = body.get_draw_page()
         orphan_connector = odf_create_connector()
-        orphan_connector.append(odf_create_paragraph(u'Orphan c'))
+        orphan_connector.append(odf_create_paragraph('Orphan c'))
         body.append(orphan_connector)
         connectors = body.get_orphan_draw_connectors()
         self.assertEqual(len(connectors), 1)

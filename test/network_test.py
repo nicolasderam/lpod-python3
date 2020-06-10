@@ -26,10 +26,10 @@
 
 # Import from the Standard Library
 import os
-from cStringIO import StringIO
+from io import StringIO
 from ftplib import FTP
 from unittest import TestCase, main
-from urllib import urlopen
+from urllib.request import urlopen
 
 # Import from lpod
 from lpod.const import ODF_EXTENSIONS

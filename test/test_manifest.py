@@ -43,7 +43,7 @@ class ManifestTestCase(TestCase):
 
 
     def test_get_manifest(self):
-        self.assert_(type(self.manifest) is odf_manifest)
+        self.assertTrue(type(self.manifest) is odf_manifest)
 
 
     def test_get_path_list(self):
@@ -72,7 +72,7 @@ class ManifestTestCase(TestCase):
 
 
     def test_get_media_type_missing(self):
-        self.assert_(self.manifest.get_media_type('LpOD') is None)
+        self.assertTrue(self.manifest.get_media_type('LpOD') is None)
 
 
     def test_set_media_type(self):
@@ -90,7 +90,7 @@ class ManifestTestCase(TestCase):
 
     def test_add_full_path(self):
         manifest = self.manifest.clone()
-        self.assert_(manifest.get_media_type('LpOD') is None)
+        self.assertTrue(manifest.get_media_type('LpOD') is None)
         manifest.add_full_path('LpOD', '')
         self.assertEqual(manifest.get_media_type('LpOD'), '')
 
@@ -108,7 +108,7 @@ class ManifestTestCase(TestCase):
         path = self.image_path
         self.assertEqual(manifest.get_media_type(path), 'image/png')
         manifest.del_full_path(path)
-        self.assert_(manifest.get_media_type(path) is None)
+        self.assertTrue(manifest.get_media_type(path) is None)
 
 
 

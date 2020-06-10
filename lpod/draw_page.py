@@ -25,9 +25,9 @@
 #
 
 # Import from lpod
-from element import register_element_class, odf_element, odf_create_element
-from shapes import registered_shapes
-from smil import odf_create_anim_par, odf_create_anim_transitionFilter
+from .element import register_element_class, odf_element, odf_create_element
+from .shapes import registered_shapes
+from .smil import odf_create_anim_par, odf_create_anim_transitionFilter
 
 
 def odf_create_draw_page(page_id=None, name=None, master_page=None,
@@ -144,10 +144,10 @@ class odf_draw_page(odf_element):
                 # and frames, that we already handle
                 for child in element.get_children():
                     result.append(child.get_formatted_text(context))
-                result.append(u"\n")
+                result.append("\n")
             result.append(element.get_formatted_text(context))
-        result.append(u"\n")
-        return u"".join(result)
+        result.append("\n")
+        return "".join(result)
 
 
 

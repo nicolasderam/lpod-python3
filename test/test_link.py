@@ -49,7 +49,7 @@ class TestLinks(TestCase):
 
 
     def test_create_link2(self):
-        link = odf_create_link('http://example.com/', name=u'link2',
+        link = odf_create_link('http://example.com/', name='link2',
                                target_frame='_blank', style='style1',
                                visited_style='style2')
         expected = ('<text:a xlink:href="http://example.com/" '
@@ -65,7 +65,7 @@ class TestLinks(TestCase):
         paragraph = self.paragraph
         paragraph.append(link1)
         paragraph.append(link2)
-        element = self.body.get_link(name=u'link2')
+        element = self.body.get_link(name='link2')
         expected = ('<text:a xlink:href="http://example.com/" '
                       'office:name="link2"/>')
         self.assertEqual(element.serialize(), expected)
@@ -122,13 +122,13 @@ class TestLinks(TestCase):
         paragraph.append(link1)
         paragraph.append(link2)
         # url
-        elements = self.body.get_links(url=ur'\.com')
+        elements = self.body.get_links(url=r'\.com')
         self.assertEqual(len(elements), 2)
 
 
     def test_href_from_existing_document(self):
         body = self.body
-        links = body.get_links(url=ur'lpod')
+        links = body.get_links(url=r'lpod')
         self.assertEqual(len(links), 1)
 
 
@@ -149,17 +149,17 @@ class TestLinks(TestCase):
 
     def test_get_link_by_href(self):
         body = self.body
-        link = body.get_link(url=ur'lpod')
+        link = body.get_link(url=r'lpod')
         url = link.get_attribute('xlink:href')
-        self.assertEqual(url, u'http://lpod-project.net/')
+        self.assertEqual(url, 'http://lpod-project.net/')
 
 
     def test_get_link_by_path_context(self):
         body = self.body
         section2 = body.get_section(position=1)
-        link = section2.get_link(url=ur'\.net')
+        link = section2.get_link(url=r'\.net')
         url = link.get_url()
-        self.assertEqual(url, u'http://lpod-project.net/')
+        self.assertEqual(url, 'http://lpod-project.net/')
 
 
     def test_get_link_list_not_found(self):
@@ -180,7 +180,7 @@ class TestInsertLink(object): #TestCase):
 
     def test_insert_link_simple(self):
         paragraph = odf_create_element('<text:p>toto tata titi</text:p>')
-        paragraph.insert_link("http://", from_=u"tata", to=u"tata")
+        paragraph.insert_link("http://", from_="tata", to="tata")
         expected = ('<text:p>toto '
                       '<text:a xlink:href="http://">tata</text:a> '
                       'titi</text:p>')
@@ -190,7 +190,7 @@ class TestInsertLink(object): #TestCase):
     def test_insert_link_medium(self):
         paragraph = odf_create_element('<text:p><text:span>toto</text:span> '
                                          'tata titi</text:p>')
-        paragraph.insert_link("http://", from_=u"tata", to=u"tata")
+        paragraph.insert_link("http://", from_="tata", to="tata")
         expected = ('<text:p><text:span>toto</text:span> '
                       '<text:a xlink:href="http://">tata</text:a> '
                       'titi</text:p>')
@@ -201,7 +201,7 @@ class TestInsertLink(object): #TestCase):
         paragraph = odf_create_element('<text:p>toto '
                                          '<text:span> tata </text:span> '
                                          'titi</text:p>')
-        paragraph.insert_link("http://", from_=u"tata", to=u"titi")
+        paragraph.insert_link("http://", from_="tata", to="titi")
         expected = ('<text:p>toto <text:span> </text:span>'
                       '<text:a xlink:href="http://">'
                         '<text:span>tata </text:span> titi'
@@ -214,7 +214,7 @@ class TestInsertLink(object): #TestCase):
         paragraph = odf_create_element('<text:p>toto '
                                          '<text:span>tata titi</text:span>'
                                          ' tutu </text:p>')
-        paragraph.insert_link("http://", from_=u"titi", to=u"tutu")
+        paragraph.insert_link("http://", from_="titi", to="tutu")
         expected = ('<text:p>toto <text:span>tata </text:span>'
                       '<text:a xlink:href="http://">'
                         '<text:span>titi</text:span> tutu'
@@ -228,7 +228,7 @@ class TestInsertLink(object): #TestCase):
                                          '<text:span>tata titi</text:span>'
                                          ' <text:span>tutu tyty</text:span>'
                                          '</text:p>')
-        paragraph.insert_link("http://", from_=u"titi", to=u"tutu")
+        paragraph.insert_link("http://", from_="titi", to="tutu")
         expected = ('<text:p>toto <text:span>tata </text:span>'
                       '<text:a xlink:href="http://">'
                         '<text:span>titi</text:span> '

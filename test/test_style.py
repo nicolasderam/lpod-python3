@@ -129,7 +129,7 @@ class Test_make_table_cell_border_string(TestCase):
 
     def test_border_bold2(self):
         expected = '0.30pt solid #000000'
-        self.assertEqual(make_table_cell_border_string(thick=u"0.30pt"), expected)
+        self.assertEqual(make_table_cell_border_string(thick="0.30pt"), expected)
 
     def test_border_int(self):
         expected = '0.06pt solid #000000'
@@ -234,14 +234,14 @@ class TestCreateStyle(TestCase):
 
 
     def test_create_style_display_name(self):
-        style = odf_create_style('paragraph', display_name=u"Heading 1")
+        style = odf_create_style('paragraph', display_name="Heading 1")
         expected = ('<style:style style:family="paragraph" '
                     'style:display-name="Heading 1"/>')
         self.assertEqual(style.serialize(), expected)
 
 
     def test_create_style_parent(self):
-        style = odf_create_style('paragraph', parent=u"Heading 1")
+        style = odf_create_style('paragraph', parent="Heading 1")
         expected = ('<style:style style:family="paragraph" '
                     'style:parent-style-name="Heading 1"/>')
         self.assertEqual(style.serialize(), expected)
@@ -285,7 +285,7 @@ class TestStyle(TestCase):
 
     def test_get_style_automatic(self):
         content = self.content
-        style = content.get_style('paragraph', u'P1')
+        style = content.get_style('paragraph', 'P1')
         self.assertNotEqual(style, None)
 
 
@@ -301,7 +301,7 @@ class TestStyle(TestCase):
                       '<style:text-properties fo:color="#0000ff" '
                                              'fo:background-color="#ff0000"/>'
                     '</style:style>')
-        get1 = content.get_style('paragraph', u'style1')
+        get1 = content.get_style('paragraph', 'style1')
         self.assertEqual(get1.serialize(), expected)
 
 
@@ -318,13 +318,13 @@ class StylePropertiesTestCase(TestCase):
 
     def test_odf_style(self):
         style = self.style_element
-        self.assert_(isinstance(style, odf_style))
+        self.assertTrue(isinstance(style, odf_style))
 
 
     def test_get_style_properties(self):
         style = self.style_element
         properties = style.get_properties()
-        self.assert_(isinstance(properties, dict))
+        self.assertTrue(isinstance(properties, dict))
         self.assertEqual(len(properties), 12)
         self.assertEqual(properties['fo:margin-left'], "0cm")
 
@@ -332,7 +332,7 @@ class StylePropertiesTestCase(TestCase):
     def test_get_style_properties_area(self):
         style = self.style_element
         properties = style.get_properties(area='text')
-        self.assert_(isinstance(properties, dict))
+        self.assertTrue(isinstance(properties, dict))
         self.assertEqual(len(properties), 1)
         self.assertEqual(properties['fo:hyphenate'], "false")
 
@@ -453,13 +453,13 @@ class LevelStyleTestCase(TestCase):
 
     def test_get_level_style(self):
         level_style = self.style.get_level_style(1)
-        self.assert_(level_style is None)
+        self.assertTrue(level_style is None)
 
 
     def test_set_level_style(self):
         self.style.set_level_style(1, num_format='1')
         level_style = self.style.get_level_style(1)
-        self.assert_(level_style is not None)
+        self.assertTrue(level_style is not None)
 
 
     def test_set_level_style_number_missing_format(self):
@@ -468,15 +468,15 @@ class LevelStyleTestCase(TestCase):
 
     def test_set_level_style_number(self):
         level_style = self.style.set_level_style(1, num_format='1')
-        self.assert_(type(level_style) is odf_list_level_style_number)
+        self.assertTrue(type(level_style) is odf_list_level_style_number)
         expected = ('<text:list-level-style-number '
                       'text:level="1" fo:num-format="1"/>')
         self.assertEqual(level_style.serialize(), expected)
 
 
     def test_set_level_style_bullet(self):
-        level_style = self.style.set_level_style(2, bullet_char=u"·")
-        self.assert_(type(level_style) is odf_style)
+        level_style = self.style.set_level_style(2, bullet_char="·")
+        self.assertTrue(type(level_style) is odf_style)
         expected = ('<text:list-level-style-bullet '
                       'text:level="2" text:bullet-char="&#183;"/>')
         self.assertEqual(level_style.serialize(), expected)
@@ -484,7 +484,7 @@ class LevelStyleTestCase(TestCase):
 
     def test_set_level_style_image(self):
         level_style = self.style.set_level_style(3, url='bullet.png')
-        self.assert_(type(level_style) is odf_style)
+        self.assertTrue(type(level_style) is odf_style)
         expected = ('<text:list-level-style-image '
                       'text:level="3" xlink:href="bullet.png"/>')
         self.assertEqual(level_style.serialize(), expected)
@@ -492,8 +492,8 @@ class LevelStyleTestCase(TestCase):
 
     def test_set_level_style_full(self):
         level_style = self.style.set_level_style(3, num_format='1',
-                prefix=u" ", suffix=u".", display_levels=3, start_value=2,
-                style=u'MyList')
+                prefix=" ", suffix=".", display_levels=3, start_value=2,
+                style='MyList')
         expected = ('<text:list-level-style-number '
                       'text:level="3" fo:num-format="1" '
                       'style:num-prefix=" " style:num-suffix="." '

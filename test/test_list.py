@@ -55,12 +55,12 @@ class TestList(TestCase):
 
     def test_create_list(self):
         item = odf_create_list_item()
-        a_list = odf_create_list([u'你好 Zoé'])
+        a_list = odf_create_list(['你好 Zoé'])
         expected = (('<text:list>'
                        '<text:list-item>'
                          '<text:p>%s</text:p>'
                        '</text:list-item>'
-                     '</text:list>') % convert_unicode(u'你好 Zoé'))
+                     '</text:list>') % convert_unicode('你好 Zoé'))
         self.assertEqual(a_list.serialize(), expected)
 
 
@@ -81,9 +81,9 @@ class TestList(TestCase):
 
     def test_insert_item(self):
         breakfast = odf_create_list()
-        breakfast.insert_item(u'spam', 1)
-        breakfast.insert_item(u'eggs', 2)
-        item = odf_create_list_item(u'ham')
+        breakfast.insert_item('spam', 1)
+        breakfast.insert_item('eggs', 2)
+        item = odf_create_list_item('ham')
         breakfast.insert_item(item, -1)
 
         expected = ('<text:list>'
@@ -104,9 +104,9 @@ class TestList(TestCase):
 
     def test_append_item(self):
         breakfast = odf_create_list()
-        breakfast.append_item(u'spam')
-        breakfast.append_item(u'ham')
-        item = odf_create_list_item(u'eggs')
+        breakfast.append_item('spam')
+        breakfast.append_item('ham')
+        item = odf_create_list_item('eggs')
         breakfast.append_item(item)
 
         expected = ('<text:list>'
@@ -126,9 +126,9 @@ class TestList(TestCase):
 
 
     def test_insert_sub_item(self):
-        spam = odf_create_list([u'spam'])
-        ham = odf_create_list([u'ham'])
-        eggs = odf_create_list([u'eggs'])
+        spam = odf_create_list(['spam'])
+        ham = odf_create_list(['ham'])
+        eggs = odf_create_list(['eggs'])
 
         spam.insert_item(ham, 1)
         ham.insert_item(eggs, 1)
@@ -158,9 +158,9 @@ class TestList(TestCase):
 
 
     def test_append_sub_item(self):
-        spam = odf_create_list([u'spam'])
-        ham = odf_create_list([u'ham'])
-        eggs = odf_create_list([u'eggs'])
+        spam = odf_create_list(['spam'])
+        ham = odf_create_list(['ham'])
+        eggs = odf_create_list(['eggs'])
 
         spam.append_item(ham)
         ham.append_item(eggs)
@@ -191,11 +191,11 @@ class TestList(TestCase):
 
     def test_nested_list(self):
         breakfast = odf_create_list()
-        spam = odf_create_list_item(u'spam')
-        ham = odf_create_list_item(u'ham')
-        eggs = odf_create_list_item(u'eggs')
+        spam = odf_create_list_item('spam')
+        ham = odf_create_list_item('ham')
+        eggs = odf_create_list_item('eggs')
         # First way: a list in an item, right next to a paragraph
-        spam.append(odf_create_list([u'thé', u'café', u'chocolat']))
+        spam.append(odf_create_list(['thé', 'café', 'chocolat']))
         breakfast.append_item(spam)
         breakfast.append_item(ham)
         breakfast.append_item(eggs)
@@ -255,10 +255,10 @@ class TestList(TestCase):
 
     def test_insert_before(self):
         breakfast = odf_create_list()
-        breakfast.append_item(u'spam')
-        eggs = odf_create_list_item(u'eggs')
+        breakfast.append_item('spam')
+        eggs = odf_create_list_item('eggs')
         breakfast.append_item(eggs)
-        ham = odf_create_list_item(u'ham')
+        ham = odf_create_list_item('ham')
         breakfast.insert_item(ham, before=eggs)
 
         expected = ('<text:list>'
@@ -279,10 +279,10 @@ class TestList(TestCase):
 
     def test_insert_after(self):
         breakfast = odf_create_list()
-        breakfast.append_item(u'spam')
-        ham = odf_create_list_item(u'ham')
+        breakfast.append_item('spam')
+        ham = odf_create_list_item('ham')
         breakfast.append_item(ham)
-        eggs = odf_create_list_item(u'eggs')
+        eggs = odf_create_list_item('eggs')
         breakfast.insert_item(eggs, after=ham)
 
         expected = ('<text:list>'
@@ -303,9 +303,9 @@ class TestList(TestCase):
 
     def test_get_item_by_content(self):
         # Create the items
-        spam = odf_create_list_item(u'spam')
-        ham = odf_create_list_item(u'ham')
-        eggs = odf_create_list_item(u'eggs')
+        spam = odf_create_list_item('spam')
+        ham = odf_create_list_item('ham')
+        eggs = odf_create_list_item('eggs')
         # Create the corresponding lists
         spam_list = odf_create_list()
         ham_list = odf_create_list()
@@ -318,7 +318,7 @@ class TestList(TestCase):
         spam.append(ham_list)
         ham.append(eggs_list)
 
-        item = spam_list.get_item(content=ur'spam')
+        item = spam_list.get_item(content=r'spam')
         expected = ('<text:list-item>\n'
                     '  <text:p>spam</text:p>\n'
                     '  <text:list>\n'
@@ -333,7 +333,7 @@ class TestList(TestCase):
                     '  </text:list>\n'
                     '</text:list-item>\n')
         self.assertEqual(item.serialize(pretty=True), expected)
-        item = spam_list.get_item(content=ur'ham')
+        item = spam_list.get_item(content=r'ham')
         expected = ('<text:list-item>\n'
                     '  <text:p>ham</text:p>\n'
                     '  <text:list>\n'
@@ -343,7 +343,7 @@ class TestList(TestCase):
                     '  </text:list>\n'
                     '</text:list-item>\n')
         self.assertEqual(item.serialize(pretty=True), expected)
-        item = spam_list.get_item(content=ur'eggs')
+        item = spam_list.get_item(content=r'eggs')
         expected = ('<text:list-item>\n'
                     '  <text:p>eggs</text:p>\n'
                     '</text:list-item>\n')
@@ -352,15 +352,15 @@ class TestList(TestCase):
 
     def test_get_formatted_text(self):
         # Create the items
-        spam = odf_create_list_item(u'In this picture, there are 47 people;\n'
-                                    u'none of them can be seen.')
-        ham = odf_create_list_item(u'In this film, we hope to show you the\n'
-                                   u'value of not being seen.\n')
-        eggs = odf_create_list_item(u'Here is Mr. Bagthorpe of London, '
-                                    u'SE14.\n')
-        foo = odf_create_list_item(u'He cannot be seen.')
-        bar = odf_create_list_item(u'Now I am going to ask him to stand up.')
-        baz = odf_create_list_item(u'Mr. Bagthorpe, will you stand up please?')
+        spam = odf_create_list_item('In this picture, there are 47 people;\n'
+                                    'none of them can be seen.')
+        ham = odf_create_list_item('In this film, we hope to show you the\n'
+                                   'value of not being seen.\n')
+        eggs = odf_create_list_item('Here is Mr. Bagthorpe of London, '
+                                    'SE14.\n')
+        foo = odf_create_list_item('He cannot be seen.')
+        bar = odf_create_list_item('Now I am going to ask him to stand up.')
+        baz = odf_create_list_item('Mr. Bagthorpe, will you stand up please?')
         # Create the lists
         how_not_to_be_seen1 = odf_create_list()
         how_not_to_be_seen2 = odf_create_list()
@@ -385,16 +385,16 @@ class TestList(TestCase):
                    'endnotes': [],
                    'annotations': [],
                    'rst_mode': False}
-        expected = (u'- In this picture, there are 47 people;\n'
-                    u'  none of them can be seen.\n'
-                    u'  \n'
-                    u'  - In this film, we hope to show you the\n'
-                    u'    value of not being seen.\n'
-                    u'  - Here is Mr. Bagthorpe of London, SE14.\n'
-                    u'  - He cannot be seen.\n'
-                    u'    \n'
-                    u'    - Now I am going to ask him to stand up.\n'
-                    u'    - Mr. Bagthorpe, will you stand up please?\n')
+        expected = ('- In this picture, there are 47 people;\n'
+                    '  none of them can be seen.\n'
+                    '  \n'
+                    '  - In this film, we hope to show you the\n'
+                    '    value of not being seen.\n'
+                    '  - Here is Mr. Bagthorpe of London, SE14.\n'
+                    '  - He cannot be seen.\n'
+                    '    \n'
+                    '    - Now I am going to ask him to stand up.\n'
+                    '    - Mr. Bagthorpe, will you stand up please?\n')
         self.assertEqual(how_not_to_be_seen1.get_formatted_text(context),
                          expected)
 

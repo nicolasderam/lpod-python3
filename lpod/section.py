@@ -26,7 +26,7 @@
 #
 
 # Import from lpod
-from element import register_element_class, odf_element, odf_create_element
+from .element import register_element_class, odf_element, odf_create_element
 
 
 
@@ -62,8 +62,8 @@ class odf_section(odf_element):
         result = []
         for element in self.get_children():
             result.append(element.get_formatted_text(context))
-        result.append(u'\n')
-        return u''.join(result)
+        result.append('\n')
+        return ''.join(result)
 
 
 

@@ -111,4 +111,4 @@ if  __name__ == '__main__':
     # Save the document
     document.save(outname, pretty=True)
     # Feed back to the user
-    print "`%s' created from `%s'" % (outname, inname)
+    print("`%s' created from `%s'" % (outname, inname))

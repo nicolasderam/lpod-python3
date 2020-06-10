@@ -43,28 +43,28 @@ class TOCTest(TestCase):
     def setUp(self):
         self.document = odf_get_document("samples/toc.odt")
         self.expected = [
-                u"Table des matières",
-                u"1. Level 1 title 1",
-                u"1.1. Level 2 title 1",
-                u"2. Level 1 title 2",
-                u"2.1.1. Level 3 title 1",
-                u"2.2. Level 2 title 2",
-                u"3. Level 1 title 3",
-                u"3.1. Level 2 title 1",
-                u"3.1.1. Level 3 title 1",
-                u"3.1.2. Level 3 title 2",
-                u"3.2. Level 2 title 2",
-                u"3.2.1. Level 3 title 1",
-                u"3.2.2. Level 3 title 2"]
+                "Table des matières",
+                "1. Level 1 title 1",
+                "1.1. Level 2 title 1",
+                "2. Level 1 title 2",
+                "2.1.1. Level 3 title 1",
+                "2.2. Level 2 title 2",
+                "3. Level 1 title 3",
+                "3.1. Level 2 title 1",
+                "3.1.1. Level 3 title 1",
+                "3.1.2. Level 3 title 2",
+                "3.2. Level 2 title 2",
+                "3.2.1. Level 3 title 1",
+                "3.2.2. Level 3 title 2"]
 
 
     def test_toc_fill_unattached(self):
-        toc = odf_create_toc(u"Table des matières")
+        toc = odf_create_toc("Table des matières")
         self.assertRaises(ValueError, toc.fill)
 
 
     def test_toc_fill_unattached_document(self):
-        toc = odf_create_toc(u"Table des matières")
+        toc = odf_create_toc("Table des matières")
         toc.fill(self.document)
         toc_lines = get_toc_lines(toc)
         self.assertEqual(toc_lines, self.expected)
@@ -72,7 +72,7 @@ class TOCTest(TestCase):
 
     def test_toc_fill_attached(self):
         document = self.document.clone()
-        toc = odf_create_toc(u"Table des matières")
+        toc = odf_create_toc("Table des matières")
         document.get_body().append(toc)
         toc.fill()
         toc_lines = get_toc_lines(toc)

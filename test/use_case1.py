@@ -47,11 +47,11 @@ from lpod.table import odf_create_column, odf_create_table
 
 
 # Hello messages
-print 'lpod installation test'
-print ' Version           : %s' %  __version__
-print ' Installation path : %s' % __installation_path__
-print
-print 'Generating test_output/use_case1.odt ...'
+print('lpod installation test')
+print(' Version           : %s' %  __version__)
+print(' Installation path : %s' % __installation_path__)
+print()
+print('Generating test_output/use_case1.odt ...')
 
 
 # Go
@@ -60,7 +60,7 @@ body = document.get_body()
 
 for numero, filename in enumerate(listdir('samples')):
     # Heading
-    heading = odf_create_heading(1, text=unicode(filename, 'utf-8'))
+    heading = odf_create_heading(1, text=str(filename, 'utf-8'))
     body.append(heading)
     path = join('samples', filename)
     mimetype, _ = guess_type(path)
@@ -85,7 +85,7 @@ for numero, filename in enumerate(listdir('samples')):
         container = document.container
         container.set_part(internal_name, open(path).read())
     elif mimetype in ('text/csv', 'text/comma-separated-values'):
-        table = odf_create_table(u"table %d" % numero, style=u"Standard")
+        table = odf_create_table("table %d" % numero, style="Standard")
         csv = reader(open(path))
         for line in csv:
             size = len(line)
@@ -94,13 +94,13 @@ for numero, filename in enumerate(listdir('samples')):
                 cell = odf_create_cell(value)
                 row.append_cell(cell)
             table.append_row(row)
-        for i in xrange(size):
-            column = odf_create_column(style=u"Standard")
+        for i in range(size):
+            column = odf_create_column(style="Standard")
             table.insert(column, FIRST_CHILD)
         body.append(table)
     else:
-        paragraph = odf_create_paragraph(u"Not image / csv",
-                style=u"Standard")
+        paragraph = odf_create_paragraph("Not image / csv",
+                style="Standard")
         body.append(paragraph)
 
 if not exists('test_output'):

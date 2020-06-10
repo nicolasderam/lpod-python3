@@ -25,7 +25,7 @@
 #
 
 # Import from lpod
-from element import odf_create_element
+from .element import odf_create_element
 
 
 def odf_create_bookmark(name):

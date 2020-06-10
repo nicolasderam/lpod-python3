@@ -28,7 +28,7 @@
 Loading his module activate the 'legacy' compatibility mode (aka versions 0.9.x)
 """
 
-import _flags
+from . import _flags
 
 _flags.legacy.set(True)
 

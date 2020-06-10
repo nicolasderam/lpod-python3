@@ -25,16 +25,16 @@
 #
 
 # Import from lpod
-from element import FIRST_CHILD
-from element import register_element_class, odf_create_element, odf_element
-from paragraph import odf_create_paragraph
-from style import odf_create_style
+from .element import FIRST_CHILD
+from .element import register_element_class, odf_create_element, odf_element
+from .paragraph import odf_create_paragraph
+from .style import odf_create_style
 #from utils import obsolete
 
 
-def odf_create_toc(title=u"Table of Contents", name=None, protected=True,
-        outline_level=None, style=None, title_style=u"Contents_20_Heading",
-        entry_style=u"Contents_20_%d"):
+def odf_create_toc(title="Table of Contents", name=None, protected=True,
+        outline_level=None, style=None, title_style="Contents_20_Heading",
+        entry_style="Contents_20_%d"):
     """Create a table of contents. Default parameters are what most people
     use: Protected from manual modifications and not limited in title levels.
 
@@ -63,7 +63,7 @@ def odf_create_toc(title=u"Table of Contents", name=None, protected=True,
     element = odf_create_element('text:table-of-content')
     # XXX
     if name is None:
-        name = u"%s1" % title
+        name = "%s1" % title
     element.set_name(name)
     element.set_protected(protected)
     if style:
@@ -81,7 +81,7 @@ def odf_create_toc(title=u"Table of Contents", name=None, protected=True,
 
 
 def odf_create_toc_source(title=None, outline_level=10,
-        title_style=u"Contents_20_Heading", entry_style=u"Contents_20_%d"):
+        title_style="Contents_20_Heading", entry_style="Contents_20_%d"):
     element = odf_create_element('text:table-of-content-source')
     element.set_outline_level(outline_level)
     if title:
@@ -133,7 +133,7 @@ def odf_create_index_title(title=None, name=None, style=None,
     return element
 
 
-TOC_ENTRY_STYLE_PATTERN = u"lpod_toc_level%d"
+TOC_ENTRY_STYLE_PATTERN = "lpod_toc_level%d"
 
 # Base style for a TOC entry
 base_tab_stop = odf_create_element('<style:tab-stop style:type="right" '
@@ -144,7 +144,7 @@ def odf_create_toc_level_style(level):
     """
     tab_stop = base_tab_stop.clone()
     position = 17.5 - (0.5 * level)
-    tab_stop.set_attribute('style:position', u'%dcm' % position)
+    tab_stop.set_attribute('style:position', '%dcm' % position)
     tab_stops = odf_create_element('style:tab-stops')
     tab_stops.append(tab_stop)
     properties = odf_create_element('style:paragraph-properties')
@@ -163,21 +163,21 @@ class odf_toc(odf_element):
         index_body = self.get_element('text:index-body')
 
         if index_body is None:
-            return u''
+            return ''
 
         if context["rst_mode"]:
-            return u"\n.. contents::\n\n"
+            return "\n.. contents::\n\n"
 
         result = []
         for element in index_body.get_children():
             if element.get_tag() == 'text:index-title':
                 for element in element.get_children():
                     result.append(element.get_formatted_text(context))
-                result.append(u'\n')
+                result.append('\n')
             else:
                 result.append(element.get_formatted_text(context))
         result.append('\n')
-        return u''.join(result)
+        return ''.join(result)
 
 
     def get_name(self):
@@ -249,7 +249,7 @@ class odf_toc(odf_element):
             index_body = self.set_body()
         index_title = index_body.get_element('text:index-title')
         if index_title is None:
-            name = u"%s_Head" % self.get_name()
+            name = "%s_Head" % self.get_name()
             index_title = odf_create_index_title(title, name=name,
                     style=style, text_style=text_style)
             index_body.append(index_title)
@@ -285,7 +285,7 @@ class odf_toc(odf_element):
         else:
             body = self.get_document_body()
         if body is None:
-            raise ValueError, "the TOC must be related to a document somehow"
+            raise ValueError("the TOC must be related to a document somehow")
 
         # Save the title
         index_body = self.get_body()
@@ -317,18 +317,18 @@ class odf_toc(odf_element):
             # 1. l < level
             for l in range(1, level):
                 index = level_indexes.setdefault(l, 1)
-                number.append(unicode(index))
+                number.append(str(index))
             # 2. l == level
             index = level_indexes.setdefault(level, 0) + 1
             level_indexes[level] = index
-            number.append(unicode(index))
+            number.append(str(index))
             # 3. l > level
             for l in range(level + 1, 11):
-                if level_indexes.has_key(l):
+                if l in level_indexes:
                     del level_indexes[l]
-            number = u'.'.join(number) + u'.'
+            number = '.'.join(number) + '.'
             # Make the title with "1.2.3. Title" format
-            title = u"%s %s" % (number, heading.get_text())
+            title = "%s %s" % (number, heading.get_text())
             paragraph = odf_create_paragraph(title)
             if use_default_styles:
                 paragraph.set_text_style(TOC_ENTRY_STYLE_PATTERN % level)

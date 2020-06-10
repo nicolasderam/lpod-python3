@@ -25,7 +25,7 @@
 #
 
 # Import from lpod
-from element import odf_create_element, odf_element, register_element_class
+from .element import odf_create_element, odf_element, register_element_class
 
 
 def odf_create_image(url, type='simple', show='embed', actuate='onLoad'):

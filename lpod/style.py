@@ -25,11 +25,11 @@
 #
 
 # Import from lpod
-from datatype import Boolean
-from element import register_element_class, odf_create_element, odf_element
-from image import odf_image
-from utils import _get_style_tagname, _expand_properties, _merge_dicts
-from utils import _get_element, isiterable  #,  obsolete
+from .datatype import Boolean
+from .element import register_element_class, odf_create_element, odf_element
+from .image import odf_image
+from .utils import _get_style_tagname, _expand_properties, _merge_dicts
+from .utils import _get_element, isiterable  #,  obsolete
 
 
 # from CSS3 color map
@@ -196,7 +196,7 @@ def hex2rgb(color):
     """
     code = color[1:]
     if not (len(color) == 7 and color[0] == '#' and code.isalnum()):
-        raise ValueError, '"%s" is not a valid color' % color
+        raise ValueError('"%s" is not a valid color' % color)
     red = int(code[:2], 16)
     green = int(code[2:4], 16)
     blue = int(code[4:6], 16)
@@ -224,16 +224,16 @@ def rgb2hex(color):
         try:
             code = COLORMAP[color.lower()]
         except KeyError:
-            raise KeyError, 'color "%s" is unknown' % color
+            raise KeyError('color "%s" is unknown' % color)
     elif type(color) is tuple:
         if len(color) != 3:
-            raise ValueError, "color must be a 3-tuple"
+            raise ValueError("color must be a 3-tuple")
         code = color
     else:
-        raise TypeError, "invalid color"
+        raise TypeError("invalid color")
     for channel in code:
         if channel < 0 or channel > 255:
-            raise ValueError, "color code must be between 0 and 255"
+            raise ValueError("color code must be between 0 and 255")
     return '#%02X%02X%02X' % code
 
 
@@ -242,8 +242,8 @@ def __make_color_string(color=None):
     color_default = "#000000"
     if color is None:
         color_string = color_default
-    elif isinstance(color, (str, unicode)):
-        if isinstance(color, unicode):
+    elif isinstance(color, str):
+        if isinstance(color, str):
             color = color.encode("utf-8")
         color = color.strip()
         if not color:
@@ -255,7 +255,7 @@ def __make_color_string(color=None):
     elif isinstance(color, tuple):
         color_string = rgb2hex(color)
     else:
-        raise ValueError, "Color must be None for default or color string, or RGB tuple"
+        raise ValueError("Color must be None for default or color string, or RGB tuple")
     return color_string
 
 
@@ -274,8 +274,8 @@ def make_table_cell_border_string(thick=None, line=None, color=None):
     line_default = "solid"
     if thick is None:
         thick_string = thick_default
-    elif isinstance(thick, (str, unicode)):
-        if isinstance(thick, unicode):
+    elif isinstance(thick, str):
+        if isinstance(thick, str):
             thick = thick.encode("utf-8")
         thick = thick.strip()
         if thick:
@@ -287,11 +287,11 @@ def make_table_cell_border_string(thick=None, line=None, color=None):
     elif isinstance(thick, int):
         thick_string = "%.2fpt" % (thick / 100.0)
     else:
-        raise ValueError, "Thickness must be None for default or float value (pt)"
+        raise ValueError("Thickness must be None for default or float value (pt)")
     if line is None:
         line_string = line_default
-    elif isinstance(line, (str, unicode)):
-        if isinstance(line, unicode):
+    elif isinstance(line, str):
+        if isinstance(line, str):
             line = line.encode("utf-8")
         line = line.strip()
         if line:
@@ -299,7 +299,7 @@ def make_table_cell_border_string(thick=None, line=None, color=None):
         else:
             line_string = line_default
     else:
-        raise ValueError, "Line style must be None for default or string"
+        raise ValueError("Line style must be None for default or string")
     color_string = __make_color_string(color)
     border = " ".join((thick_string, line_string, color_string))
     return border
@@ -417,7 +417,7 @@ def odf_create_style(family, name=None, display_name=None, parent=None,
         min_height=None,
         # For family 'font-face'
         font_name=None, font_family=None, font_family_generic=None,
-        font_pitch=u"variable",
+        font_pitch="variable",
         # Every other property
         **kw):
     """Create a style of the given family. The name is not mandatory at this
@@ -608,8 +608,8 @@ class odf_style(odf_element):
         family = self.get_attribute('style:family')
         # Where the family is known from the tag, it must be defined
         if family is None:
-            raise ValueError, 'family undefined in %s "%s"' % (self,
-                    self.get_name())
+            raise ValueError('family undefined in %s "%s"' % (self,
+                    self.get_name()))
         return family
 
 
@@ -686,7 +686,7 @@ class odf_style(odf_element):
             properties = style.get_properties(area=area)
             if properties is None:
                 return
-        for key, value in properties.iteritems():
+        for key, value in properties.items():
             if value is None:
                 element.del_attribute(key)
             else:
@@ -710,7 +710,7 @@ class odf_style(odf_element):
             area = self.get_family()
         element = self.get_element('style:%s-properties' % area)
         if element is None:
-            raise ValueError, "properties element is inexistent"
+            raise ValueError("properties element is inexistent")
         for key in _expand_properties(properties):
             element.del_attribute(key)
 
@@ -751,9 +751,9 @@ class odf_style(odf_element):
         family = self.get_family()
         if family not in ('text', 'paragraph', 'page-layout', 'section',
                           'table', 'table-row', 'table-cell', 'graphic'):
-            raise TypeError, 'no background support for this family'
+            raise TypeError('no background support for this family')
         if url is not None and family == 'text':
-            raise TypeError, 'no background image for text styles'
+            raise TypeError('no background image for text styles')
         properties = self.get_element('style:%s-properties' % family)
         if properties is None:
             bg_image = None
@@ -857,7 +857,7 @@ class odf_list_style(odf_style):
         elif clone is not None:
             level_style_name = clone.get_tag()
         else:
-            raise ValueError, "unknown level style type"
+            raise ValueError("unknown level style type")
         was_created = False
         # Cloning or reusing an existing element
         if clone is not None:
@@ -917,7 +917,7 @@ class odf_page_layout(odf_style):
 
 
     def set_family(self):
-        raise ValueError, 'family is read-only'
+        raise ValueError('family is read-only')
 
 
     def get_header_style(self):
@@ -951,7 +951,7 @@ class odf_master_page(odf_style):
     XXX to verify
     """
     def __set_header_or_footer(self, text_or_element, name='header',
-                               style=u"Header"):
+                               style="Header"):
         if name == 'header':
             header_or_footer = self.get_header()
         else:
@@ -970,9 +970,9 @@ class odf_master_page(odf_style):
                 return
             text_or_element = [text_or_element]
         # FIXME cyclic import
-        from paragraph import odf_create_paragraph
+        from .paragraph import odf_create_paragraph
         for item in text_or_element:
-            if type(item) is unicode:
+            if type(item) is str:
                 paragraph = odf_create_paragraph(item, style=style)
                 header_or_footer.append(paragraph)
             elif isinstance(item, odf_element):
@@ -988,7 +988,7 @@ class odf_master_page(odf_style):
 
 
     def set_family(self):
-        raise ValueError, 'family is read-only'
+        raise ValueError('family is read-only')
 
 
     def get_page_layout(self):
@@ -1049,7 +1049,7 @@ class odf_master_page(odf_style):
             text_or_element -- unicode or odf_element or a list of them
         """
         return self.__set_header_or_footer(text_or_element, name='footer',
-                                           style=u"Footer")
+                                           style="Footer")
 
 
 class odf_font_style(odf_style):
@@ -1059,7 +1059,7 @@ class odf_font_style(odf_style):
 
 
     def set_font(self, name, family=None, family_generic=None,
-            pitch=u"variable"):
+            pitch="variable"):
         self.set_attribute('style:name', name)
         if family is None:
             family = name

@@ -36,21 +36,21 @@ from docutils.core import publish_doctree
 from PIL import Image
 
 # Import from lpod
-from document import odf_new_document
-from frame import odf_create_image_frame, odf_create_text_frame
-from heading import odf_create_heading
-from link import odf_create_link
-from list import odf_create_list, odf_create_list_item
-from note import odf_create_note
-from paragraph import odf_create_paragraph, odf_create_line_break
-from paragraph import odf_create_spaces
-from span import odf_create_span
-from scriptutils import printwarn
-from style import odf_create_style
-from table import odf_create_cell, odf_create_table, odf_create_row
-from table import odf_create_column, odf_create_header_rows
-from toc import odf_create_toc
-from utils import DPI
+from .document import odf_new_document
+from .frame import odf_create_image_frame, odf_create_text_frame
+from .heading import odf_create_heading
+from .link import odf_create_link
+from .list import odf_create_list, odf_create_list_item
+from .note import odf_create_note
+from .paragraph import odf_create_paragraph, odf_create_line_break
+from .paragraph import odf_create_spaces
+from .span import odf_create_span
+from .scriptutils import printwarn
+from .style import odf_create_style
+from .table import odf_create_cell, odf_create_table, odf_create_row
+from .table import odf_create_column, odf_create_header_rows
+from .toc import odf_create_toc
+from .utils import DPI
 
 
 
@@ -269,7 +269,7 @@ def convert_literal_block(node, context):
         for c in text:
             if c == '\n':
                 if tmp:
-                    tmp = u"".join(tmp)
+                    tmp = "".join(tmp)
                     paragraph.append(tmp)
                     tmp = []
                 spaces = 0
@@ -284,7 +284,7 @@ def convert_literal_block(node, context):
             else:
                 if spaces >= 2:
                     if tmp:
-                        tmp = u"".join(tmp)
+                        tmp = "".join(tmp)
                         paragraph.append(tmp)
                         tmp = []
                     paragraph.append(' ')
@@ -296,7 +296,7 @@ def convert_literal_block(node, context):
                     spaces = 0
                 tmp.append(c)
         if tmp:
-            tmp = u"".join(tmp)
+            tmp = "".join(tmp)
             paragraph.append(tmp)
 
 
@@ -319,13 +319,13 @@ def _get_term_style(context):
     # Reuse template style if any
     doc = context['doc']
     term_style = doc.get_style('paragraph',
-            u"Definition_20_List_20_Term")
+            "Definition_20_List_20_Term")
     if term_style is None:
         # Create default one
         term_style = odf_create_style('paragraph',
-                name=u"Definition_20_List_20_Term",
-                display_name=u"Definition List Term", parent="Standard",
-                font_weight=u"bold", area='text')
+                name="Definition_20_List_20_Term",
+                display_name="Definition List Term", parent="Standard",
+                font_weight="bold", area='text')
         doc.insert_style(term_style, automatic=False)
     styles['term'] = term_style
     return term_style
@@ -340,15 +340,15 @@ def _get_definition_style(context):
     # Reuse template style if any
     doc = context['doc']
     definition_style = doc.get_style('paragraph',
-            u"Definition_20_List_20_Definition")
+            "Definition_20_List_20_Definition")
     if definition_style is None:
         # Create default one
         definition_style = odf_create_style('paragraph',
-                name=u"Definition_20_List_20_Definition",
-                display_name=u"Definition List Definition",
-                parent="Standard", margin_left=u"0.5cm",
-                margin_right=u"0cm", text_indent=u"0cm",
-                **{'style:auto-text-indent': u"false"})
+                name="Definition_20_List_20_Definition",
+                display_name="Definition List Definition",
+                parent="Standard", margin_left="0.5cm",
+                margin_right="0cm", text_indent="0cm",
+                **{'style:auto-text-indent': "false"})
         doc.insert_style(definition_style, automatic=False)
     styles['definition'] = definition_style
     return definition_style
@@ -401,12 +401,12 @@ def _get_caption_style(context):
     caption_style = styles.get('caption')
     if caption_style is not None:
         return caption_style
-    caption_style = odf_create_style('graphic', parent=u"Frame",
-            **{'style:wrap': u"none", 'style:vertical-pos': u"top",
-                'style:vertical-rel': u"paragraph-content",
-                'style:horizontal-pos': u"center",
-                'style:horizontal-rel': u"paragraph-content",
-                'fo:padding': u"0.25cm", 'fo:border': u"0cm solid #000000"})
+    caption_style = odf_create_style('graphic', parent="Frame",
+            **{'style:wrap': "none", 'style:vertical-pos': "top",
+                'style:vertical-rel': "paragraph-content",
+                'style:horizontal-pos': "center",
+                'style:horizontal-rel': "paragraph-content",
+                'fo:padding': "0.25cm", 'fo:border': "0cm solid #000000"})
     context['doc'].insert_style(caption_style, automatic=True)
     styles['caption'] = caption_style
     return caption_style
@@ -419,8 +419,8 @@ def _get_image_style(context):
     if image_style is not None:
         return image_style
     image_style = odf_create_style('graphic', parent="Graphics",
-            **{'style:horizontal-pos': u"center",
-                'style:horizontal-rel': u"paragraph"})
+            **{'style:horizontal-pos': "center",
+                'style:horizontal-rel': "paragraph"})
     context['doc'].insert_style(image_style, automatic=True)
     styles['image'] = image_style
     return image_style
@@ -433,7 +433,7 @@ def _add_image(image, caption, context, width=None, height=None):
     try:
         image_file = open(image.encode(encoding), 'rb')
         image_object = Image.open(image_file)
-    except (UnicodeEncodeError, IOError, OverflowError), e:
+    except (UnicodeEncodeError, IOError, OverflowError) as e:
         printwarn('unable to insert the image "%s": %s' % (image, e))
         return
     size = image_object.size
@@ -443,19 +443,19 @@ def _add_image(image, caption, context, width=None, height=None):
         try:
             width = int(width.replace('px', ''))
         except ValueError:
-            raise NotImplementedError, 'only pixel units supported'
+            raise NotImplementedError('only pixel units supported')
         if height:
             try:
                 height = int(height.replace('px', ''))
             except ValueError:
-                raise NotImplementedError, 'only pixel units supported'
+                raise NotImplementedError('only pixel units supported')
         else:
             height = int(width / (float(size[0]) / float(size[1])))
     elif height:
         try:
             height = int(height.replace('px', ''))
         except ValueError:
-            raise NotImplementedError, 'only pixel units supported'
+            raise NotImplementedError('only pixel units supported')
         width = int(height * (float(size[0]) / float(size[1])))
     else:
         # If the information is not present, we assume a width of 640 px
@@ -570,8 +570,8 @@ def _get_cell_style(context):
     if cell_style is not None:
         return cell_style
     # Give borders to cells
-    cell_style = odf_create_style('table-cell', u"odf_table.A1",
-            padding=u"0.049cm", border=u"0.002cm solid #000000")
+    cell_style = odf_create_style('table-cell', "odf_table.A1",
+            padding="0.049cm", border="0.002cm solid #000000")
     context['doc'].insert_style(cell_style, automatic=True)
     styles['cell'] = cell_style
     return cell_style
@@ -658,7 +658,7 @@ def convert_node(node, context):
         return convert_method(node, context)
     message = "node not supported: %s" % tagname
     if context['strict']:
-        raise ValueError, message
+        raise ValueError(message)
     printwarn(message)
 
 

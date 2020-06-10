@@ -101,7 +101,7 @@ class ElementTestCase(TestCase):
     def test_get_root(self):
         element = odf_create_element('<text:p><text:span/></text:p>')
         root = element.get_root()
-        self.assert_(root.get_parent() is None)
+        self.assertTrue(root.get_parent() is None)
 
 
     def test_clone(self):
@@ -188,7 +188,7 @@ class ElementAttributeTestCase(TestCase):
     def test_get_attribute_namespace(self):
         element = self.paragraph_element
         text = element.get_attribute('text:style-name')
-        self.assert_(isinstance(text, unicode))
+        self.assertTrue(isinstance(text, str))
         self.assertEqual(text, "Text_20_body")
 
 
@@ -252,13 +252,13 @@ class ElementTextTestCase(TestCase):
     def test_get_text(self):
         element = self.paragraph_element
         text = element.get_text()
-        self.assertEqual(text, u"This is the first paragraph.")
+        self.assertEqual(text, "This is the first paragraph.")
 
 
     def test_set_text(self):
         element = self.paragraph_element
         old_text = element.get_text()
-        new_text = u'A test'
+        new_text = 'A test'
         element.set_text(new_text)
         self.assertEqual(element.get_text(), new_text)
         element.set_text(old_text)
@@ -276,14 +276,14 @@ class ElementTextTestCase(TestCase):
     def test_get_text_content(self):
         element = self.annotation_element
         text = element.get_text_content()
-        self.assertEqual(text, u"This is an annotation.\n"
-                u"With diacritical signs: éè")
+        self.assertEqual(text, "This is an annotation.\n"
+                "With diacritical signs: éè")
 
 
     def test_set_text_content(self):
         element = self.annotation_element
         old_text = element.get_text_content()
-        text = u"Have a break"
+        text = "Have a break"
         element.set_text_content(text)
         self.assertEqual(element.get_text_content(), text)
         element.set_text_content(old_text)
@@ -377,11 +377,11 @@ class ElementTraverseTestCase(TestCase):
 
     def test_append_element(self):
         element = odf_create_element("text:p")
-        element.append(u"f")
-        element.append(u"oo1")
+        element.append("f")
+        element.append("oo1")
         element.append(odf_create_element("text:line-break"))
-        element.append(u"f")
-        element.append(u"oo2")
+        element.append("f")
+        element.append("oo2")
         self.assertEqual(element.serialize(),
                          "<text:p>foo1<text:line-break/>foo2</text:p>")
 
@@ -399,35 +399,35 @@ class SearchTestCase(TestCase):
     def test_search_paragraph(self):
         """Search text in a paragraph.
         """
-        pos = self.paragraph.search(u'ère')
+        pos = self.paragraph.search('ère')
         return self.assertEqual(pos, 4)
 
 
     def test_match_span(self):
         """Search text in a span.
         """
-        pos = self.span.search(u'moust')
+        pos = self.span.search('moust')
         return self.assertEqual(pos, 0)
 
 
     def test_match_inner_span(self):
         """Search text in a span from the parent paragraph.
         """
-        pos = self.paragraph.search(u'roug')
+        pos = self.paragraph.search('roug')
         return self.assertEqual(pos, 29)
 
 
     def test_simple_regex(self):
         """Search a simple regex.
         """
-        pos = self.paragraph.search(u'che roug')
+        pos = self.paragraph.search('che roug')
         return self.assertEqual(pos, 25)
 
 
     def test_intermediate_regex(self):
         """Search an intermediate regex.
         """
-        pos = self.paragraph.search(u'moustache (blanche|rouge)')
+        pos = self.paragraph.search('moustache (blanche|rouge)')
         return self.assertEqual(pos, 19)
 
 
@@ -436,14 +436,14 @@ class SearchTestCase(TestCase):
         """
         # The (?<=...) part is pointless as we don't try to get groups from
         # a MatchObject. However, it's a valid regex expression.
-        pos = self.paragraph.search(ur'(?<=m)(ou)\w+(che) (blan\2|r\1ge)')
+        pos = self.paragraph.search(r'(?<=m)(ou)\w+(che) (blan\2|r\1ge)')
         return self.assertEqual(pos, 20)
 
 
     def test_compiled_regex(self):
         """Search with a compiled pattern.
         """
-        pattern = compile(ur'moustache')
+        pattern = compile(r'moustache')
         pos = self.paragraph.search(pattern)
         return self.assertEqual(pos, 19)
 
@@ -451,8 +451,8 @@ class SearchTestCase(TestCase):
     def test_failing_match(self):
         """Test a regex that doesn't match.
         """
-        pos = self.paragraph.search(u'Le Père moustache')
-        return self.assert_(pos is None)
+        pos = self.paragraph.search('Le Père moustache')
+        return self.assertTrue(pos is None)
 
 
 
@@ -468,35 +468,35 @@ class MatchTestCase(TestCase):
     def test_match_paragraph(self):
         """Match text in a paragraph.
         """
-        match = self.paragraph.match(u'ère')
+        match = self.paragraph.match('ère')
         return self.assertTrue(match)
 
 
     def test_match_span(self):
         """Match text in a span.
         """
-        match = self.span.match(u'moust')
+        match = self.span.match('moust')
         return self.assertTrue(match)
 
 
     def test_match_inner_span(self):
         """Match text in a span from the parent paragraph.
         """
-        match = self.paragraph.match(u'roug')
+        match = self.paragraph.match('roug')
         return self.assertTrue(match)
 
 
     def test_simple_regex(self):
         """Match a simple regex.
         """
-        match = self.paragraph.match(u'che roug')
+        match = self.paragraph.match('che roug')
         return self.assertTrue(match)
 
 
     def test_intermediate_regex(self):
         """Match an intermediate regex.
         """
-        match = self.paragraph.match(u'moustache (blanche|rouge)')
+        match = self.paragraph.match('moustache (blanche|rouge)')
         return self.assertTrue(match)
 
 
@@ -505,14 +505,14 @@ class MatchTestCase(TestCase):
         """
         # The (?<=...) part is pointless as we don't try to get groups from
         # a MatchObject. However, it's a valid regex expression.
-        match = self.paragraph.match(ur'(?<=m)(ou)\w+(che) (blan\2|r\1ge)')
+        match = self.paragraph.match(r'(?<=m)(ou)\w+(che) (blan\2|r\1ge)')
         return self.assertTrue(match)
 
 
     def test_compiled_regex(self):
         """Match with a compiled pattern.
         """
-        pattern = compile(ur'moustache')
+        pattern = compile(r'moustache')
         match = self.paragraph.match(pattern)
         return self.assertTrue(match)
 
@@ -520,7 +520,7 @@ class MatchTestCase(TestCase):
     def test_failing_match(self):
         """Test a regex that doesn't match.
         """
-        match = self.paragraph.match(u'Le Père moustache')
+        match = self.paragraph.match('Le Père moustache')
         return self.assertFalse(match)
 
 
@@ -537,7 +537,7 @@ class ReplaceTestCase(TestCase):
     def test_count(self):
         paragraph = self.paragraph
         expected = paragraph.serialize()
-        count = paragraph.replace(u"ou")
+        count = paragraph.replace("ou")
         self.assertEqual(count, 2)
         # Ensure the orignal was not altered
         self.assertEqual(paragraph.serialize(), expected)
@@ -546,9 +546,9 @@ class ReplaceTestCase(TestCase):
     def test_replace(self):
         paragraph = self.paragraph
         clone = paragraph.clone()
-        count =  clone.replace(u"moustache", u"barbe")
+        count =  clone.replace("moustache", "barbe")
         self.assertEqual(count, 1)
-        expected = u"Le Père Noël a une barbe rouge."
+        expected = "Le Père Noël a une barbe rouge."
         self.assertEqual(clone.get_text(recursive=True), expected)
         # Ensure the orignal was not altered
         self.assertNotEqual(clone.serialize(), paragraph.serialize())
@@ -556,13 +556,13 @@ class ReplaceTestCase(TestCase):
 
     def test_across_span(self):
         paragraph = self.paragraph
-        count = paragraph.replace(u"moustache rouge")
+        count = paragraph.replace("moustache rouge")
         self.assertEqual(count, 0)
 
 
     def test_missing(self):
         paragraph = self.paragraph
-        count = paragraph.replace(u"barbe")
+        count = paragraph.replace("barbe")
         self.assertEqual(count, 0)
 
 
@@ -585,25 +585,25 @@ class RegisterTestCase(TestCase):
     def test_register(self):
         register_element_class('office:dummy1', self.dummy_element)
         element = odf_create_element('office:dummy1')
-        self.assert_(type(element) is self.dummy_element)
+        self.assertTrue(type(element) is self.dummy_element)
 
 
     def test_unregistered(self):
         element = odf_create_element('office:dummy2')
-        self.assert_(type(element) is odf_element)
+        self.assertTrue(type(element) is odf_element)
 
 
     def test_register_family(self):
         register_element_class('office:dummy3', self.dummy_element,
                 family='graphics')
         element = odf_create_element('<office:dummy3/>')
-        self.assert_(type(element) is odf_element)
+        self.assertTrue(type(element) is odf_element)
         element = odf_create_element('<office:dummy3 '
                 'style:family="graphics"/>')
-        self.assert_(type(element) is self.dummy_element)
+        self.assertTrue(type(element) is self.dummy_element)
         element = odf_create_element('<office:dummy4 '
                 'style:family="graphics"/>')
-        self.assert_(type(element) is odf_element)
+        self.assertTrue(type(element) is odf_element)
 
 
 

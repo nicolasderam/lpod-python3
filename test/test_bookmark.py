@@ -43,34 +43,34 @@ class BookmarkTest(TestCase):
 
 
     def test_create_bookmark(self):
-        bookmark = odf_create_bookmark(u'你好 Zoé')
+        bookmark = odf_create_bookmark('你好 Zoé')
         expected = ('<text:bookmark text:name="%s"/>' %
-                    convert_unicode(u'你好 Zoé'))
+                    convert_unicode('你好 Zoé'))
         self.assertEqual(bookmark.serialize(), expected)
 
 
     def test_create_bookmark_start(self):
-        bookmark_start = odf_create_bookmark_start(u'你好 Zoé')
+        bookmark_start = odf_create_bookmark_start('你好 Zoé')
         expected = ('<text:bookmark-start text:name="%s"/>' %
-                    convert_unicode(u'你好 Zoé'))
+                    convert_unicode('你好 Zoé'))
         self.assertEqual(bookmark_start.serialize(), expected)
 
 
     def test_create_bookmark_end(self):
-        bookmark_end = odf_create_bookmark_end(u'你好 Zoé')
+        bookmark_end = odf_create_bookmark_end('你好 Zoé')
         expected = ('<text:bookmark-end text:name="%s"/>' %
-                    convert_unicode(u'你好 Zoé'))
+                    convert_unicode('你好 Zoé'))
         self.assertEqual(bookmark_end.serialize(), expected)
 
 
     def test_get_bookmark(self):
         body = self.body
         para = self.body.get_paragraph()
-        bookmark = odf_create_bookmark(u'你好 Zoé')
+        bookmark = odf_create_bookmark('你好 Zoé')
         para.append(bookmark)
-        get = body.get_bookmark(name=u'你好 Zoé')
+        get = body.get_bookmark(name='你好 Zoé')
         expected = ('<text:bookmark text:name="%s"/>' %
-                    convert_unicode(u'你好 Zoé'))
+                    convert_unicode('你好 Zoé'))
         self.assertEqual(get.serialize(), expected)
 
 
@@ -86,43 +86,43 @@ class BookmarkTest(TestCase):
     def test_get_bookmark_start(self):
         body = self.body
         para = self.body.get_paragraph()
-        bookmark_start = odf_create_bookmark_start(u'你好 Zoé')
+        bookmark_start = odf_create_bookmark_start('你好 Zoé')
         para.append(bookmark_start)
-        get = body.get_bookmark_start(name=u'你好 Zoé')
+        get = body.get_bookmark_start(name='你好 Zoé')
         expected = ('<text:bookmark-start text:name="%s"/>' %
-                    convert_unicode(u'你好 Zoé'))
+                    convert_unicode('你好 Zoé'))
         self.assertEqual(get.serialize(), expected)
 
 
     def test_get_bookmark_start_list(self):
-        bookmark_start = odf_create_bookmark_start(u'你好 Zoé')
+        bookmark_start = odf_create_bookmark_start('你好 Zoé')
         para = self.body.get_paragraph()
         para.append(bookmark_start)
         get = self.body.get_bookmark_starts()[0]
         expected = ('<text:bookmark-start text:name="%s"/>' %
-                    convert_unicode(u'你好 Zoé'))
+                    convert_unicode('你好 Zoé'))
         self.assertEqual(get.serialize(), expected)
 
 
     def test_get_bookmark_end(self):
         body = self.body
         para = self.body.get_paragraph()
-        bookmark_end = odf_create_bookmark_end(u'你好 Zoé')
+        bookmark_end = odf_create_bookmark_end('你好 Zoé')
         para.append(bookmark_end)
-        get = body.get_bookmark_end(name=u'你好 Zoé')
+        get = body.get_bookmark_end(name='你好 Zoé')
         expected = ('<text:bookmark-end text:name="%s"/>' %
-                    convert_unicode(u'你好 Zoé'))
+                    convert_unicode('你好 Zoé'))
         self.assertEqual(get.serialize(), expected)
 
 
     def test_get_bookmark_end_list(self):
         body = self.body
-        bookmark_end = odf_create_bookmark_end(u'你好 Zoé')
+        bookmark_end = odf_create_bookmark_end('你好 Zoé')
         para = self.body.get_paragraph()
         para.append(bookmark_end)
         get = body.get_bookmark_ends()[0]
         expected = ('<text:bookmark-end text:name="%s"/>' %
-                    convert_unicode(u'你好 Zoé'))
+                    convert_unicode('你好 Zoé'))
         self.assertEqual(get.serialize(), expected)
 
 
@@ -135,7 +135,7 @@ class BookmarkTest(TestCase):
 
 
     def test_set_bookmark_with_after_without_position(self):
-        paragraph = odf_create_paragraph(u"aa bb aa aa cc aa dd")
+        paragraph = odf_create_paragraph("aa bb aa aa cc aa dd")
         paragraph.set_span(style="style", regex="bb aa aa")
         paragraph.set_span(style="style", regex="dd")
         paragraph.set_bookmark("bookmark", after="aa")
@@ -148,7 +148,7 @@ class BookmarkTest(TestCase):
 
 
     def test_set_bookmark_with_before(self):
-        paragraph = odf_create_paragraph(u"aa bb aa aa cc aa dd")
+        paragraph = odf_create_paragraph("aa bb aa aa cc aa dd")
         paragraph.set_span(style="style", regex="bb aa aa")
         paragraph.set_span(style="style", regex="dd")
         paragraph.set_bookmark("bookmark", before="aa", position=1)
@@ -162,7 +162,7 @@ class BookmarkTest(TestCase):
 
 
     def test_set_bookmark_with_after(self):
-        paragraph = odf_create_paragraph(u"aa bb aa aa cc aa dd")
+        paragraph = odf_create_paragraph("aa bb aa aa cc aa dd")
         paragraph.set_span(style="style", regex="bb aa aa")
         paragraph.set_span(style="style", regex="dd")
         paragraph.set_bookmark("bookmark", after="aa", position=1)
@@ -176,13 +176,13 @@ class BookmarkTest(TestCase):
 
 
     def test_set_bookmark_with_position(self):
-        paragraph = odf_create_paragraph(u"aa bb aa aa cc aa dd")
+        paragraph = odf_create_paragraph("aa bb aa aa cc aa dd")
         paragraph.set_span(style="style", regex="bb aa aa")
         paragraph.set_span(style="style", regex="dd")
         paragraph.set_bookmark("bookmark1", position=0)
         paragraph.set_bookmark("bookmark2", position=2)
         paragraph.set_bookmark("bookmark3",
-                               position=len(u"aa bb aa aa cc aa dd"))
+                               position=len("aa bb aa aa cc aa dd"))
         expected = ('<text:p><text:bookmark text:name="bookmark1"/>aa'
                       '<text:bookmark text:name="bookmark2"/> '
                       '<text:span text:style-name="style">bb aa aa</text:span>'
@@ -193,7 +193,7 @@ class BookmarkTest(TestCase):
 
 
     def test_set_bookmark_with_end(self):
-        paragraph = odf_create_paragraph(u"aa bb aa aa cc aa dd")
+        paragraph = odf_create_paragraph("aa bb aa aa cc aa dd")
         paragraph.set_span(style="style", regex="bb aa aa")
         paragraph.set_span(style="style", regex="dd")
         paragraph.set_bookmark("bookmark1", after="cc", position=-1)
@@ -210,7 +210,7 @@ class BookmarkTest(TestCase):
 
 
     def test_set_bookmark_with_role(self):
-        paragraph = odf_create_paragraph(u"aa")
+        paragraph = odf_create_paragraph("aa")
         paragraph.set_bookmark("bookmark", role="start")
         paragraph.set_bookmark("bookmark", role="end", position=-1)
         expected = ('<text:p>'
@@ -222,7 +222,7 @@ class BookmarkTest(TestCase):
 
 
     def test_set_bookmark_with_content(self):
-        paragraph = odf_create_paragraph(u"aa bb bb aa")
+        paragraph = odf_create_paragraph("aa bb bb aa")
         paragraph.set_bookmark("bookmark", content="bb", position=1)
         expected = ('<text:p>aa bb '
                       '<text:bookmark-start text:name="bookmark"/>'
@@ -234,7 +234,7 @@ class BookmarkTest(TestCase):
 
 
     def test_set_bookmark_with_limits(self):
-        paragraph = odf_create_paragraph(u"aa bb bb aa")
+        paragraph = odf_create_paragraph("aa bb bb aa")
         paragraph.set_bookmark("bookmark", position=(6, 8))
         expected = ('<text:p>aa bb '
                       '<text:bookmark-start text:name="bookmark"/>'

@@ -36,18 +36,18 @@ from operator import itemgetter
 from uuid import uuid4
 
 # Import from lpod
-from __init__ import __version__
-from const import ODF_CONTENT, ODF_META, ODF_SETTINGS, ODF_STYLES
-from const import ODF_MANIFEST
-from container import odf_get_container, odf_new_container, odf_container
-from content import odf_content
-from manifest import odf_manifest
-from meta import odf_meta
-from style import odf_style, odf_master_page, odf_font_style, odf_page_layout
-from style import registered_styles
-from styles import odf_styles
+from .__init__ import __version__
+from .const import ODF_CONTENT, ODF_META, ODF_SETTINGS, ODF_STYLES
+from .const import ODF_MANIFEST
+from .container import odf_get_container, odf_new_container, odf_container
+from .content import odf_content
+from .manifest import odf_manifest
+from .meta import odf_meta
+from .style import odf_style, odf_master_page, odf_font_style, odf_page_layout
+from .style import registered_styles
+from .styles import odf_styles
 #from utils import obsolete
-from xmlpart import odf_xmlpart
+from .xmlpart import odf_xmlpart
 
 
 underline_lvl = ['=', '-', ':', '`', "'", '"', '~', '^', '_', '*', '+']
@@ -70,8 +70,8 @@ def _show_styles(element, level=0):
     output[-1] += '\n'
     attrs = []
     # Attributes
-    for key, value in attributes.iteritems():
-        attrs.append(u'%s: %s' % (key, value))
+    for key, value in attributes.items():
+        attrs.append('%s: %s' % (key, value))
     if attrs:
         attrs.sort()
         # Add a separation between attributes and children
@@ -243,16 +243,16 @@ class odf_document(object):
                 # Separate text from notes
                 if footnotes:
                     if rst_mode:
-                        result.append(u'\n')
+                        result.append('\n')
                     else:
-                        result.append(u'----\n')
+                        result.append('----\n')
                     for citation, body in footnotes:
                         if rst_mode:
-                            result.append(u'.. [#] %s\n' % body)
+                            result.append('.. [#] %s\n' % body)
                         else:
-                            result.append(u'[%s] %s\n' % (citation, body))
+                            result.append('[%s] %s\n' % (citation, body))
                     # Append a \n after the notes
-                    result.append(u'\n')
+                    result.append('\n')
                     # Reset for the next paragraph
                     context['footnotes'] = []
                 # Insert the annotations
@@ -260,9 +260,9 @@ class odf_document(object):
                 # With a separation
                 if annotations:
                     if rst_mode:
-                        result.append(u'\n')
+                        result.append('\n')
                     else:
-                        result.append(u'----\n')
+                        result.append('----\n')
                     for annotation in annotations:
                         if rst_mode:
                             result.append('.. [#] %s\n' % annotation)
@@ -272,29 +272,29 @@ class odf_document(object):
                 # Insert the images ref, only in rst mode
                 images = context['images']
                 if images:
-                    result.append(u'\n')
+                    result.append('\n')
                     for ref, filename, (width, height) in images:
-                        result.append(u'.. %s image:: %s\n' %
+                        result.append('.. %s image:: %s\n' %
                                       (ref, filename))
                         if width is not None:
-                            result.append(u'   :width: %s\n' % width)
+                            result.append('   :width: %s\n' % width)
                         if height is not None:
-                            result.append(u'   :height: %s\n' % height)
-                        result.append(u'\n')
+                            result.append('   :height: %s\n' % height)
+                        result.append('\n')
                     context['images'] = []
         # Append the end notes
         endnotes = context['endnotes']
         if endnotes:
             if rst_mode:
-                result.append(u'\n\n')
+                result.append('\n\n')
             else:
-                result.append(u'\n========\n')
+                result.append('\n========\n')
             for citation, body in endnotes:
                 if rst_mode:
-                    result.append(u'.. [*] %s\n' % body)
+                    result.append('.. [*] %s\n' % body)
                 else:
-                    result.append(u'(%s) %s\n' % (citation, body))
-        return u''.join(result)
+                    result.append('(%s) %s\n' % (citation, body))
+        return ''.join(result)
 
 
     def get_formated_meta(self):
@@ -321,7 +321,7 @@ class odf_document(object):
         # Statistic
         result.append("Statistic:")
         statistic =  meta.get_statistic()
-        for name, value in statistic.iteritems():
+        for name, value in statistic.items():
             result.append("  - %s: %s" % (
                               name[5:].replace('-', ' ').capitalize(),
                               value))
@@ -329,13 +329,13 @@ class odf_document(object):
         # User defined metadata
         result.append("User defined metadata:")
         user_metadata = meta.get_user_defined_metadata()
-        for name, value in user_metadata.iteritems():
+        for name, value in user_metadata.items():
             result.append("  - %s: %s" % (name, value))
 
         # And the description
         print_info("Description", meta.get_description())
 
-        return u"\n".join(result) + '\n'
+        return "\n".join(result) + '\n'
 
 
     def add_file(self, path_or_file):
@@ -354,7 +354,7 @@ class odf_document(object):
         manifest = self.get_part(ODF_MANIFEST)
         medias = manifest.get_paths()
 
-        if type(path_or_file) is unicode or type(path_or_file) is str:
+        if type(path_or_file) is str or type(path_or_file) is str:
             path_or_file = path_or_file.encode('utf_8')
             handler = open(path_or_file, 'rb')
             name = path_or_file
@@ -405,7 +405,7 @@ class odf_document(object):
                 setattr(clone, name, self.container.clone())
             elif name == '_odf_document__xmlparts':
                 xmlparts = {}
-                for key, value in self.__xmlparts.iteritems():
+                for key, value in self.__xmlparts.items():
                     xmlparts[key] = value.clone()
                 setattr(clone, name, xmlparts)
             else:
@@ -434,10 +434,10 @@ class odf_document(object):
         # Some advertising
         meta = self.get_part(ODF_META)
         if not meta._generator_modified:
-            meta.set_generator(u"lpOD Python %s" % __version__)
+            meta.set_generator("lpOD Python %s" % __version__)
         # Synchronize data with container
         container = self.container
-        for path, part in self.__xmlparts.iteritems():
+        for path, part in self.__xmlparts.items():
             if part is not None:
                 container.set_part(path, part.serialize(pretty))
         # Save the container
@@ -634,35 +634,35 @@ class odf_document(object):
                     or not is_auto and common is False):
                 continue
             is_used = bool(self.get_styled_elements(name))
-            infos.append({'type': u"auto  " if is_auto else u"common",
-                          'used': u"y" if is_used else u"n",
-                          'family': style.get_family() or u"",
-                          'parent': style.get_parent_style() or u"",
-                          'name': name or u"",
+            infos.append({'type': "auto  " if is_auto else "common",
+                          'used': "y" if is_used else "n",
+                          'family': style.get_family() or "",
+                          'parent': style.get_parent_style() or "",
+                          'name': name or "",
                           'display_name': style.get_display_name(),
                           'properties': style.get_properties() if
                                         properties else None})
         if not infos:
-            return u""
+            return ""
         # Sort by family and name
         infos.sort(key=itemgetter('family', 'name'))
         # Show common and used first
         infos.sort(key=itemgetter('type', 'used'), reverse=True)
-        max_family = unicode(max([len(x['family']) for x in infos]))
-        max_parent = unicode(max([len(x['parent']) for x in infos]))
-        format = (u"%(type)s used:%(used)s family:%(family)-0" + max_family
-                + u"s parent:%(parent)-0" + max_parent + u"s name:%(name)s")
+        max_family = str(max([len(x['family']) for x in infos]))
+        max_parent = str(max([len(x['parent']) for x in infos]))
+        format = ("%(type)s used:%(used)s family:%(family)-0" + max_family
+                + "s parent:%(parent)-0" + max_parent + "s name:%(name)s")
         output = []
         for info in infos:
             line = format % info
             if info['display_name']:
-                line += u' display_name:' + info['display_name']
+                line += ' display_name:' + info['display_name']
             output.append(line)
             if info['properties']:
-                for name, value in info['properties'].iteritems():
+                for name, value in info['properties'].items():
                     output.append("   - %s: %s" % (name, value))
-        output.append(u"")
-        return u"\n".join(output)
+        output.append("")
+        return "\n".join(output)
 
 
     def delete_styles(self):

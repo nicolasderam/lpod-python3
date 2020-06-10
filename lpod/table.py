@@ -28,17 +28,17 @@
 #
 
 # Import from the Standard Library
-from cStringIO import StringIO
+from io import StringIO
 from csv import reader, Sniffer
 from textwrap import wrap
 from bisect import bisect_left, insort
 import string
 
 # Import from lpod
-from datatype import Boolean, Date, DateTime, Duration
-from element import odf_create_element, register_element_class, odf_element
-from element import _xpath_compile
-from utils import get_value, _set_value_and_type, isiterable   #, obsolete
+from .datatype import Boolean, Date, DateTime, Duration
+from .element import odf_create_element, register_element_class, odf_element
+from .element import _xpath_compile
+from .utils import get_value, _set_value_and_type, isiterable   #, obsolete
 
 
 
@@ -52,19 +52,19 @@ _xpath_cell_idx = _xpath_compile('(table:table-cell|table:covered-table-cell)[$i
 
 
 def _table_name_check(name):
-    if not isinstance(name, basestring):
-        raise ValueError, "String required."
+    if not isinstance(name, str):
+        raise ValueError("String required.")
     name = name.strip()
     if not name :
-        raise ValueError, "Empty name not allowed."
+        raise ValueError("Empty name not allowed.")
     for character in ('\n', '/', '\\', "'") :
         if character in name:
-            raise ValueError, 'Character %s not allowed.' % character
+            raise ValueError('Character %s not allowed.' % character)
     return name
 
 
 _forbidden_in_named_range = [x for x in string.printable if x not in
-                            string.letters and x not in
+                            string.ascii_letters and x not in
                             string.digits and x !='_']
 
 
@@ -74,7 +74,7 @@ def _alpha_to_digit(alpha):
     if type(alpha) is int:
         return alpha
     if not alpha.isalpha():
-        raise ValueError, 'column name "%s" is malformed' % str(alpha)
+        raise ValueError('column name "%s" is malformed' % str(alpha))
     column = 0
     for c in alpha.lower():
         v = ord(c) - ord('a') + 1
@@ -87,7 +87,7 @@ def _digit_to_alpha(digit):
     if type(digit) is str and digit.isalpha():
         return digit
     if not type(digit) is int:
-        raise ValueError, 'column number "%s" is invalid' % str(digit)
+        raise ValueError('column number "%s" is invalid' % str(digit))
     digit += 1
     column = ''
     while digit:
@@ -99,7 +99,7 @@ def _digit_to_alpha(digit):
 
 def _coordinates_to_alpha_area(coord):
         # assuming : either (x,y) or (x,y,z,t), with positive values
-        if isinstance(coord, basestring):
+        if isinstance(coord, str):
             # either A1 or A1:B2, returns A1:A1 if needed
             parts = coord.strip().split(':')
             if len(parts) == 1:
@@ -142,8 +142,8 @@ def _convert_coordinates(obj):
     if isiterable(obj):
         return tuple(obj)
     # Or by 'B3' notation ?
-    if not isinstance(obj, basestring):
-        raise ValueError, 'bad coordinates type: "%s"' % type(obj)
+    if not isinstance(obj, str):
+        raise ValueError('bad coordinates type: "%s"' % type(obj))
     coordinates = []
     for coord in [x.strip() for x in obj.split(':', 1)]:
         # First "A"
@@ -168,7 +168,7 @@ def _convert_coordinates(obj):
             # maybe 'A:C' row coordinates
             line = None
         if line and line <= 0:
-            raise ValueError, 'coordinates "%s" malformed' % obj
+            raise ValueError('coordinates "%s" malformed' % obj)
         coordinates.append(line)
     return tuple(coordinates)
 
@@ -178,7 +178,7 @@ def _get_python_value(data, encoding):
     """Try and guess the most appropriate Python type to load the data, with
     regard to ODF types.
     """
-    data = unicode(data, encoding)
+    data = str(data, encoding)
     # An int ?
     try:
         return int(data)
@@ -501,7 +501,7 @@ def odf_create_row(width=None, repeated=None, style=None, cache=None):
     """
     element = odf_create_element('table:table-row', cache)
     if width is not None:
-        for i in xrange(width):
+        for i in range(width):
             element.append(odf_create_cell())
     if repeated:
         element.set_repeated(repeated)
@@ -526,7 +526,7 @@ def odf_create_row_group(height=None, width=None):
     """
     element = odf_create_row_group('<table:table-row-group')
     if height is not None:
-        for i in xrange(height):
+        for i in range(height):
             row = odf_create_row(width=width)
             element.append(row)
     return element
@@ -619,9 +619,9 @@ def odf_create_table(name, width=None, height=None, protected=False,
     element.set_name(name)
     if protected:
         if protection_key is None:
-            raise ValueError, "missing protection key"
+            raise ValueError("missing protection key")
         # TODO
-        raise NotImplementedError, "protected"
+        raise NotImplementedError("protected")
         element.set_protected(protected)
     if not display:
         element.set_displayed(display)
@@ -638,7 +638,7 @@ def odf_create_table(name, width=None, height=None, protected=False,
         # Column groups for style information
         columns = odf_create_column(repeated=width)
         element._append(columns)
-        for i in xrange(height):
+        for i in range(height):
             row = odf_create_row(width)
             element._append(row)
     element._compute_table_cache()
@@ -908,7 +908,7 @@ class odf_row(odf_element):
 
 
     def _translate_x_from_any(self, x):
-        if isinstance(x, basestring):
+        if isinstance(x, str):
             x, _ = _convert_coordinates(x)
         if x and x < 0:
             return _increment(x, self.get_width())
@@ -1060,7 +1060,7 @@ class odf_row(odf_element):
                     self._indexes['_rmap'][idx] = cell
                 repeated = juska - before
                 before = juska
-                for i in xrange(repeated or 1):
+                for i in range(repeated or 1):
                     # Return a copy without the now obsolete repetition
                     if cell is None:
                         cell = odf_create_cell()
@@ -1098,7 +1098,7 @@ class odf_row(odf_element):
                     self._indexes['_rmap'][idx] = cell
                 repeated = juska - before
                 before = juska
-                for i in xrange(repeated or 1):
+                for i in range(repeated or 1):
                     if x <= end:
                         if cell is None:
                             cell = odf_create_cell()
@@ -1651,7 +1651,7 @@ class odf_table(odf_element):
 
 
     def _translate_x_from_any(self, x):
-        if isinstance(x, basestring):
+        if isinstance(x, str):
             x, _ = _convert_coordinates(x)
         if x and x < 0:
             return _increment(x, self.get_width())
@@ -1660,7 +1660,7 @@ class odf_table(odf_element):
 
     def _translate_y_from_any(self, y):
         # "3" (couting from 1) -> 2 (couting from 0)
-        if isinstance(y, basestring):
+        if isinstance(y, str):
             _, y = _convert_coordinates(y)
         if y and y < 0:
             return _increment(y, self.get_height())
@@ -1782,7 +1782,7 @@ class odf_table(odf_element):
         elif len(coord) == 4:
             x, y, z, t = coord
         else:
-            raise ValueError, "ValueError %s" % str(coord)
+            raise ValueError("ValueError %s" % str(coord))
         if x and x < 0:
             x = _increment(x, self.get_width())
         if y and y < 0:
@@ -1818,13 +1818,13 @@ class odf_table(odf_element):
                     value = []
                     for element in cell.get_children():
                         value.append(element.get_formatted_text(context))
-                    value = u''.join(value)
+                    value = ''.join(value)
                 else:
-                    value = unicode(value)
+                    value = str(value)
                 result.append(value)
-                result.append(u'\n')
-            result.append(u'\n')
-        return u''.join(result)
+                result.append('\n')
+            result.append('\n')
+        return ''.join(result)
 
 
     def __get_formatted_text_rst(self, context):
@@ -1847,9 +1847,9 @@ class odf_table(odf_element):
                     value = []
                     for element in cell.get_children():
                         value.append(element.get_formatted_text(context))
-                    value = u''.join(value)
+                    value = ''.join(value)
                 else:
-                    value = unicode(value)
+                    value = str(value)
                 value = value.strip()
                 # Strip the empty columns
                 if value:
@@ -1862,10 +1862,10 @@ class odf_table(odf_element):
 
         # Nothing ?
         if cols_nb == 0:
-            return u''
+            return ''
 
         # Prevent a crash with empty columns (by example with images)
-        for col, size in cols_size.iteritems():
+        for col, size in cols_size.items():
             if size == 0:
                 cols_size[col] = 1
 
@@ -1892,13 +1892,13 @@ class odf_table(odf_element):
                 cols_size[i] = new_size
 
         # Convert !
-        result = [u'']
+        result = ['']
         # Construct the first/last line
         line = []
         for i in range(cols_nb):
-            line.append(u'=' * cols_size[i])
-            line.append(u' ')
-        line = u''.join(line)
+            line.append('=' * cols_size[i])
+            line.append(' ')
+        line = ''.join(line)
 
         # Add the lines
         result.append(line)
@@ -1933,23 +1933,23 @@ class odf_table(odf_element):
                     # An empty cell ?
                     if len(values) - 1 < j or not values[j]:
                         if i == 0 and j == 0:
-                            txt_row.append(u'..')
-                            txt_row.append(u' ' * (cols_size[i] - 1))
+                            txt_row.append('..')
+                            txt_row.append(' ' * (cols_size[i] - 1))
                         else:
-                            txt_row.append(u' ' * (cols_size[i] + 1))
+                            txt_row.append(' ' * (cols_size[i] + 1))
                         continue
 
                     # Not empty
                     value = values[j]
                     txt_row.append(value)
-                    txt_row.append(u' ' * (cols_size[i] - len(value) + 1))
-                txt_row = u''.join(txt_row)
+                    txt_row.append(' ' * (cols_size[i] - len(value) + 1))
+                txt_row = ''.join(txt_row)
                 result.append(txt_row)
 
         result.append(line)
-        result.append(u'')
-        result.append(u'')
-        result = u'\n'.join(result)
+        result.append('')
+        result.append('')
+        result = '\n'.join(result)
 
         context['no_img_level'] -= 1
         return result
@@ -2324,7 +2324,7 @@ class odf_table(odf_element):
         if coord is None:
             for row in self.traverse():
                 data.append([cell for cell in row.traverse()])
-            transposed_data = map(None, *data)
+            transposed_data = list(*data)
             self.clear()
             new_rows = []
             for row_cells in transposed_data:
@@ -2354,7 +2354,7 @@ class odf_table(odf_element):
                 t = min(t, self.get_height() - 1)
             for row in self.traverse(start=y, end=t):
                 data.append([cell for cell in row.traverse(start=x, end=z)])
-            transposed_data = map(None, *data)
+            transposed_data = list(*data)
             # clear locally
             w = z - x + 1
             h = t -y + 1
@@ -2420,7 +2420,7 @@ class odf_table(odf_element):
                     self._indexes['_tmap'][idx] = row
                 repeated = juska - before
                 before = juska
-                for i in xrange(repeated or 1):
+                for i in range(repeated or 1):
                     # Return a copy without the now obsolete repetition
                     row = row.clone()
                     row.y = y
@@ -2454,7 +2454,7 @@ class odf_table(odf_element):
                     self._indexes['_tmap'][idx] = row
                 repeated = juska - before
                 before = juska
-                for i in xrange(repeated or 1):
+                for i in range(repeated or 1):
                     if y <= end:
                         row = row.clone()
                         row.y = y
@@ -3041,11 +3041,11 @@ class odf_table(odf_element):
         if type is None:
             body = self.get_document_body()
             if body is None:
-                raise ValueError, "document type not found"
+                raise ValueError("document type not found")
             type = {'office:spreadsheet': 'spreadsheet',
                     'office:text': 'text'}.get(body.get_tag())
             if type is None:
-                raise ValueError, "document type not supported for images"
+                raise ValueError("document type not supported for images")
         # We need the end address of the image
         x, y = self._translate_cell_coordinates(coord)
         cell = self.get_cell((x, y))
@@ -3061,14 +3061,14 @@ class odf_table(odf_element):
             image_frame.set_attribute('table:end-x', width)
             image_frame.set_attribute('table:end-y', height)
             # FIXME what happens when the address changes?
-            address = u"%s.%s%s" % (self.get_name(),
+            address = "%s.%s%s" % (self.get_name(),
                     _digit_to_alpha(x), y + 1)
             image_frame.set_attribute('table:end-cell-address', address)
             # The frame is directly in the cell
             cell.append(image_frame)
         elif type == 'text':
             # The frame must be in a paragraph
-            cell.set_value(u"")
+            cell.set_value("")
             paragraph = cell.get_element('text:p')
             paragraph.append(image_frame)
         self.set_cell(coord, cell)
@@ -3199,7 +3199,7 @@ class odf_table(odf_element):
                     self._indexes['_cmap'][idx] = column
                 repeated = juska - before
                 before = juska
-                for i in xrange(repeated or 1):
+                for i in range(repeated or 1):
                     # Return a copy without the now obsolete repetition
                     column = column.clone()
                     column.x = x
@@ -3233,7 +3233,7 @@ class odf_table(odf_element):
                     self._indexes['_cmap'][idx] = column
                 repeated = juska - before
                 before = juska
-                for i in xrange(repeated or 1):
+                for i in range(repeated or 1):
                     if x <= end:
                         column = column.clone()
                         column.x = x
@@ -3560,10 +3560,10 @@ class odf_table(odf_element):
         """
         height = self.get_height()
         if len(cells) != height:
-            raise ValueError, "col mismatch: %s cells expected" % height
+            raise ValueError("col mismatch: %s cells expected" % height)
         cells = iter(cells)
         for y, row in enumerate(self.traverse()):
-            row.set_cell(x, cells.next())
+            row.set_cell(x, next(cells))
             self.set_row(y, row)
 
 
@@ -3636,12 +3636,12 @@ class odf_table(odf_element):
         if not table_name:
             return all_named_ranges
         filter = []
-        if isinstance(table_name, basestring):
+        if isinstance(table_name, str):
             filter.append(table_name)
         elif isiterable(table_name):
             filter.extend(table_name)
         else:
-            raise ValueError, "table_name must be string or Iterable, not %s" % type(table_name)
+            raise ValueError("table_name must be string or Iterable, not %s" % type(table_name))
         return [nr for nr in all_named_ranges if nr.table_name in filter]
 
 
@@ -3659,7 +3659,7 @@ class odf_table(odf_element):
         """
         body = self.get_document_body()
         if not body:
-            raise ValueError, "Table is not inside a document"
+            raise ValueError("Table is not inside a document")
         return body.get_named_range(name)
 
 
@@ -3680,9 +3680,9 @@ class odf_table(odf_element):
         """
         body = self.get_document_body()
         if not body:
-            raise ValueError, "Table is not inside a document"
+            raise ValueError("Table is not inside a document")
         if not name:
-            raise ValueError, "Name required."
+            raise ValueError("Name required.")
         if table_name is None:
             table_name = self.get_name()
         named_range = odf_create_named_range(name, crange, table_name, usage)
@@ -3700,10 +3700,10 @@ class odf_table(odf_element):
         """
         name = name.strip()
         if not name:
-            raise ValueError, "Name required."
+            raise ValueError("Name required.")
         body = self.get_document_body()
         if not body:
-            raise ValueError, "Table is not inside a document."
+            raise ValueError("Table is not inside a document.")
         body.delete_named_range(name)
 
 
@@ -3782,9 +3782,9 @@ class odf_table(odf_element):
                         continue
                     val = cell.get_value()
                     if val is not None:
-                        if isinstance(val, basestring):
+                        if isinstance(val, str):
                             val.strip()
-                        if val !=u'':
+                        if val !='':
                             val_list.append(val)
                         cell.clear()
             if val_list:
@@ -3880,7 +3880,7 @@ class odf_table(odf_element):
         if path_or_file is None:
             file = StringIO()
         # Path
-        elif type(path_or_file) is str or type(path_or_file) is unicode:
+        elif type(path_or_file) is str or type(path_or_file) is str:
             file = open(path_or_file, 'wb')
             close_after = True
         # Open file
@@ -3891,7 +3891,7 @@ class odf_table(odf_element):
             line = []
             for value in values:
                 # Also testing lxml.etree._ElementUnicodeResult
-                if type(value) is unicode:
+                if type(value) is str:
                     value = value.encode(encoding)
                 if type(value) is str:
                     value = value.strip()
@@ -3984,13 +3984,13 @@ class odf_named_range(odf_element):
         """
         name = name.strip()
         if not name:
-            raise ValueError, "Name required."
+            raise ValueError("Name required.")
         for x in name:
             if x in _forbidden_in_named_range:
-                raise ValueError, "Character forbidden '%s' " % x
+                raise ValueError("Character forbidden '%s' " % x)
         step = ''
         for x in name:
-            if x in string.letters and step in ('', 'A'):
+            if x in string.ascii_letters and step in ('', 'A'):
                 step = 'A'
                 continue
             elif step in ('A', 'A1') and x in string.digits:
@@ -4000,7 +4000,7 @@ class odf_named_range(odf_element):
                 step = ''
                 break
         if step == 'A1':
-            raise ValueError, "Name of the type 'ABC123' is not allowed."
+            raise ValueError("Name of the type 'ABC123' is not allowed.")
         try:
             body = self.get_document_body()
             named_range = body.get_named_range(name)
@@ -4088,7 +4088,7 @@ class odf_named_range(odf_element):
         """
         body = self.get_document_body()
         if not body:
-            raise ValueError, "Table is not inside a document."
+            raise ValueError("Table is not inside a document.")
         table = body.get_table(name = self.table_name)
         return table.get_values(self.crange, cell_type, complete,
                    get_type, flat)
@@ -4100,7 +4100,7 @@ class odf_named_range(odf_element):
         """
         body = self.get_document_body()
         if not body:
-            raise ValueError, "Table is not inside a document."
+            raise ValueError("Table is not inside a document.")
         table = body.get_table(name = self.table_name)
         return table.get_value(self.start, get_type)
 
@@ -4112,7 +4112,7 @@ class odf_named_range(odf_element):
         """
         body = self.get_document_body()
         if not body:
-            raise ValueError, "Table is not inside a document."
+            raise ValueError("Table is not inside a document.")
         table = body.get_table(name = self.table_name)
         return table.set_values(values, coord=self.crange, style=style,
                    cell_type=cell_type, currency=currency)
@@ -4125,7 +4125,7 @@ class odf_named_range(odf_element):
         """
         body = self.get_document_body()
         if not body:
-            raise ValueError, "Table is not inside a document."
+            raise ValueError("Table is not inside a document.")
         table = body.get_table(name = self.table_name)
         return table.set_value(coord=self.start, value=value,
                                cell_type=cell_type,

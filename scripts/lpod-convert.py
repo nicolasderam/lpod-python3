@@ -74,7 +74,7 @@ def spreadsheet_to_text(indoc, outdoc):
                         formula = oooc_to_ooow(formula)
                     else:
                         # Found an OpenFormula test case
-                        raise NotImplementedError, formula
+                        raise NotImplementedError(formula)
                     cell.set_formula(formula)
                 outrow.append(cell)
             outtable.append_row(outrow)
@@ -346,13 +346,13 @@ def write_presentation_para(para, outdoc, encoding):
                     # XXX
                     continue
                 else:
-                    print child.serialize()
-                    raise NotImplementedError, tag
+                    print(child.serialize())
+                    raise NotImplementedError(tag)
             outdoc.write('</span>')
             outdoc.write(get_string(child.get_tail(), encoding))
         else:
-            print para.serialize()
-            raise NotImplementedError, tag
+            print(para.serialize())
+            raise NotImplementedError(tag)
     text = get_string(para.get_text(recursive=True), encoding)
     outdoc.write('</p>\n')
 
@@ -370,11 +370,11 @@ def write_presentation_list(liste, outdoc, encoding):
                 elif tag == 'text:p':
                     write_presentation_para(child, outdoc, encoding)
                 else:
-                    print item.serialize()
-                    raise NotImplementedError, tag
+                    print(item.serialize())
+                    raise NotImplementedError(tag)
             continue
         elif tag != 'text:list-item':
-            raise NotImplementedError, tag
+            raise NotImplementedError(tag)
         outdoc.write('<li>\n')
         for child in item.get_children():
             tag = child.get_tag()
@@ -383,8 +383,8 @@ def write_presentation_list(liste, outdoc, encoding):
             elif tag == 'text:p':
                 write_presentation_para(child, outdoc, encoding)
             else:
-                print item.serialize()
-                raise NotImplementedError, tag
+                print(item.serialize())
+                raise NotImplementedError(tag)
         outdoc.write('</li>\n')
     outdoc.write('</ul>\n')
 
@@ -403,8 +403,8 @@ def write_presentation_text(frame, outdoc, encoding):
         elif tag == 'draw:enhanced-geometry':
             continue
         else:
-            print text_box.serialize()
-            raise NotImplementedError, tag
+            print(text_box.serialize())
+            raise NotImplementedError(tag)
 
 
 
@@ -516,7 +516,7 @@ if  __name__ == '__main__':
             try:
                 mimetype = ODF_EXTENSIONS[extension]
             except KeyError:
-                raise ValueError, ("output filename not recognized: " +
+                raise ValueError("output filename not recognized: " +
                                    extension)
             outtype = mimetype[mimetype.rindex('.') + 1:]
             if '-template' in outtype:
@@ -525,7 +525,7 @@ if  __name__ == '__main__':
     # Convert function
     converter = locals().get('%s_to_%s' % (intype, outtype))
     if converter is None:
-        raise NotImplementedError, "unsupported combination"
+        raise NotImplementedError("unsupported combination")
     # Remove output file
     if not target_file_checked:
         check_target_file(outfile)

@@ -26,8 +26,8 @@
 #
 
 # Import from lpod
-from element import odf_element, odf_create_element, register_element_class
-from paragraph import paragraph_base
+from .element import odf_element, odf_create_element, register_element_class
+from .paragraph import paragraph_base
 
 
 

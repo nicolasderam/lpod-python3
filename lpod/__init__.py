@@ -27,30 +27,30 @@
 #
 
 # Import from lpod
-from utils import _get_abspath
-from _version import __version__
+from .utils import _get_abspath
+from ._version import __version__
 
 __installation_path__ = _get_abspath('')
 
 
 # Constants at the first level
-from const import *
+from .const import *
 
 
 # Register element classes
-import draw_page
-import frame
-import heading
-import list
-import note
-import paragraph
-import section
-import shapes
-import span
-import style
-import table
-import toc
-import tracked_changes
+from . import draw_page
+from . import frame
+from . import heading
+from . import list
+from . import note
+from . import paragraph
+from . import section
+from . import shapes
+from . import span
+from . import style
+from . import table
+from . import toc
+from . import tracked_changes
 
 # Silent pyflakes
 draw_page, frame, heading, list, note, paragraph, section, shapes, span,

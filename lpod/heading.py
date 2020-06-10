@@ -28,8 +28,8 @@
 from re import sub
 
 # Import from lpod
-from paragraph import odf_paragraph
-from element import register_element_class, odf_create_element
+from .paragraph import odf_paragraph
+from .element import register_element_class, odf_create_element
 
 
 def odf_create_heading(level, text=None, restart_numbering=False,
@@ -97,15 +97,15 @@ class odf_heading(odf_paragraph):
         # If here in rst_mode!
 
         # Get the level, max 5!
-        LEVEL_STYLES = u"#=-~`+^°'."
+        LEVEL_STYLES = "#=-~`+^°'."
         level = self.get_outline_level()
         if level > len(LEVEL_STYLES):
-            raise ValueError, "Too many levels of heading"
+            raise ValueError("Too many levels of heading")
 
         # And return the result
-        result = [u'\n', title, u'\n', LEVEL_STYLES[level - 1] * len(title),
-                  u'\n']
-        return u''.join(result)
+        result = ['\n', title, '\n', LEVEL_STYLES[level - 1] * len(title),
+                  '\n']
+        return ''.join(result)
 
 
 

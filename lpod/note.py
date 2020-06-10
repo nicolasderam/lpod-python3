@@ -31,7 +31,7 @@ from datetime import datetime
 from types import FunctionType
 
 # Import from lpod
-from element import odf_create_element, odf_element, register_element_class
+from .element import odf_create_element, odf_element, register_element_class
 
 
 def odf_create_note(note_class='footnote', note_id=None, citation=None,
@@ -83,7 +83,7 @@ def get_unique_office_name(element=None):
         used.extend(element.get_office_names())
     i = 1
     while True:
-        name = u'__Fieldmark__lpod_%s' % i
+        name = '__Fieldmark__lpod_%s' % i
         if name in used:
             i += 1
             continue
@@ -189,7 +189,7 @@ class odf_note(odf_element):
 
     def set_body(self, text_or_element):
         note_body = self.get_element('text:note-body')
-        if type(text_or_element) is unicode:
+        if type(text_or_element) is str:
             note_body.set_text_content(text_or_element)
         elif isinstance(text_or_element, odf_element):
             note_body.clear()
@@ -219,7 +219,7 @@ class odf_annotation(odf_element):
 
 
     def set_body(self, text_or_element):
-        if type(text_or_element) is unicode:
+        if type(text_or_element) is str:
             self.set_text_content(text_or_element)
         elif isinstance(text_or_element, odf_element):
             self.clear()
@@ -278,7 +278,7 @@ class odf_annotation(odf_element):
         end = self.get_end()
         if end is None:
             if as_text:
-                return u''
+                return ''
             return None
         body = self.get_document_body()
         if not body:

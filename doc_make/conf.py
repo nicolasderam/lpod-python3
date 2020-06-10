@@ -21,7 +21,7 @@ from datetime import datetime
 try:
     import lpod
 except ImportError:
-    print "\nError: You must first install lpod on your python"
+    print("\nError: You must first install lpod on your python")
     exit(1)
 
 # If your extensions are in another directory, add it here. If the directory
@@ -49,8 +49,8 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'lpOD-python'
-copyright = u'2009-2013, lpOD team'
+project = 'lpOD-python'
+copyright = '2009-2013, lpOD team'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -187,8 +187,8 @@ htmlhelp_basename = 'lpod-python-doc'
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, document class [howto/manual]).
 latex_documents = [
-  ('index', 'lpod.tex', ur'LPOD-Python Documentation',
-   ur'LPOD team', 'manual'),
+  ('index', 'lpod.tex', r'LPOD-Python Documentation',
+   r'LPOD team', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -256,7 +256,7 @@ def setup(app):
                 synopsis = "Lpod %s module" % module
 
             # And the save the file
-            print 'Make "%s" module autodoc' % module
+            print('Make "%s" module autodoc' % module)
             rst_file = open("autodocs/%s.rst" % module, "w")
             rst_file.write(template_module.format(module=module,
                                                   synopsis=synopsis))

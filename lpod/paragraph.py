@@ -32,21 +32,21 @@ import re
 from functools import wraps  # for keeping trace of docstring with decorators
 
 # Import from lpod
-from bookmark import odf_create_bookmark, odf_create_bookmark_start
-from bookmark import odf_create_bookmark_end
-from element import FIRST_CHILD, NEXT_SIBLING
-from element import register_element_class, odf_element, odf_create_element
-from paragraph_base import paragraph_base
-from paragraph_base import odf_create_spaces
-from paragraph_base import odf_create_tabulation
-from paragraph_base import odf_create_line_break
+from .bookmark import odf_create_bookmark, odf_create_bookmark_start
+from .bookmark import odf_create_bookmark_end
+from .element import FIRST_CHILD, NEXT_SIBLING
+from .element import register_element_class, odf_element, odf_create_element
+from .paragraph_base import paragraph_base
+from .paragraph_base import odf_create_spaces
+from .paragraph_base import odf_create_tabulation
+from .paragraph_base import odf_create_line_break
 
-from note import odf_create_note
-from note import odf_create_annotation, odf_create_annotation_end
-from reference import odf_create_reference_mark, odf_create_reference_mark_start
-from reference import odf_create_reference_mark_end, odf_create_reference
-from style import odf_style
-from link import odf_create_link
+from .note import odf_create_note
+from .note import odf_create_annotation, odf_create_annotation_end
+from .reference import odf_create_reference_mark, odf_create_reference_mark_start
+from .reference import odf_create_reference_mark_end, odf_create_reference
+from .style import odf_style
+from .link import odf_create_link
 
 
 
@@ -152,7 +152,7 @@ def _by_regex_offset(method):
                     upper.insert(result, position=index + 1)
                 return
         if regex:
-            pattern = re.compile(unicode(regex), re.UNICODE)
+            pattern = re.compile(str(regex), re.UNICODE)
             for text in element.xpath('descendant::text()'):
                 # Static information about the text node
                 container = text.get_parent()
@@ -208,7 +208,7 @@ class odf_paragraph(paragraph_base):
             if body:
                 note_element.set_body(body)
         note_element.check_validity()
-        if type(after) is unicode:
+        if type(after) is str:
             self._insert(note_element, after=after, main_text=True)
         elif isinstance(after, odf_element):
             after.insert(note_element, FIRST_CHILD)
@@ -339,7 +339,7 @@ class odf_paragraph(paragraph_base):
 
         if annotation_element is None:
             raise ValueError
-        if annotation_element.get_tag() != u'office:annotation':
+        if annotation_element.get_tag() != 'office:annotation':
             raise ValueError("Not a 'office:annotation' element")
 
         # remove existing end tag
@@ -457,12 +457,12 @@ class odf_paragraph(paragraph_base):
 
             position -- int
         """
-        if reference_mark.get_tag() not in (u'text:reference-mark',
-                                            u'text:reference-mark-start'):
+        if reference_mark.get_tag() not in ('text:reference-mark',
+                                            'text:reference-mark-start'):
             raise ValueError(
             "Not a 'text:reference-mark or text:reference-mark-start' element")
         name = reference_mark.get_name()
-        if reference_mark.get_tag() == u'text:reference-mark':
+        if reference_mark.get_tag() == 'text:reference-mark':
             # change it to a range reference:
             reference_mark._set_tag_raw('text:reference-mark-start')
 
@@ -620,7 +620,7 @@ class odf_paragraph(paragraph_base):
             if mark:
                 display = mark.get_referenced_text()
         if not display:
-            display = u' '
+            display = ' '
         reference.set_text(display)
         if isinstance(after, odf_element):
             after.insert(reference, FIRST_CHILD)

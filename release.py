@@ -89,6 +89,6 @@ def get_git_files():
 
 if __name__ == '__main__':
     try:
-        print get_release()
+        print(get_release())
     except:
         printerr('%s: unable to read info' % basename(argv[0]))

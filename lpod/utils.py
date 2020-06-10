@@ -36,7 +36,7 @@ from sys import _getframe, modules
 from warnings import warn
 
 # Import from lpod
-from datatype import Boolean, Date, DateTime, Duration
+from .datatype import Boolean, Date, DateTime, Duration
 
 
 CELL_TYPES = ('boolean', 'currency', 'date', 'float', 'percentage', 'string',
@@ -145,9 +145,9 @@ def _make_xpath_query(element_name, family=None, text_style=None,
     for qname in sorted(attributes):
         value = attributes[qname]
         if value is True:
-            query.append(u'[@%s]' % qname)
+            query.append('[@%s]' % qname)
         else:
-            query.append(u'[@%s="%s"]' % (qname, unicode(value)))
+            query.append('[@%s="%s"]' % (qname, str(value)))
     query = ''.join(query)
     if position is not None:
         # A position argument that mimics the behaviour of a python's list
@@ -157,7 +157,7 @@ def _make_xpath_query(element_name, family=None, text_style=None,
             position = 'last()'
         else:
             position = 'last()-%d' % (abs(position) - 1)
-        query = u'(%s)[%s]' % (query, position)
+        query = '(%s)[%s]' % (query, position)
     return query
 
 
@@ -191,12 +191,12 @@ family_mapping = {
 
 def _get_style_tagname(family):
     if family not in family_mapping:
-        raise ValueError, "unknown family: " + family
+        raise ValueError("unknown family: " + family)
     return family_mapping[family]
 
 
 def _get_style_family(name):
-    for family, (tagname, famattr) in family_mapping.iteritems():
+    for family, (tagname, famattr) in family_mapping.items():
         if tagname == name:
             return family
     return None
@@ -245,7 +245,7 @@ def _expand_properties(properties):
 
     if type(properties) is dict:
         expanded = {}
-        for key, value in properties.iteritems():
+        for key, value in properties.items():
             key = map_key(key)
             expanded[key] = value
     elif type(properties) is list:
@@ -337,34 +337,34 @@ def _set_value_and_type(element, value=None, value_type=None, text=None,
         if value_type is None:
             value_type = 'boolean'
         if text is None:
-            text = u'true' if value else u'false'
+            text = 'true' if value else 'false'
         value = Boolean.encode(value)
-    elif isinstance(value, (int, float, long, dec)):
+    elif isinstance(value, (int, float, dec)):
         if value_type is 'percentage':
             text = "%d %%" % int(value * 100)
         if value_type is None:
             value_type = 'float'
         if text is None:
-            text = unicode(value)
+            text = str(value)
         value = str(value)
     elif type(value) is date:
         if value_type is None:
             value_type = 'date'
         if text is None:
-            text = unicode(Date.encode(value))
+            text = str(Date.encode(value))
         value = Date.encode(value)
     elif type(value) is datetime:
         if value_type is None:
             value_type = 'date'
         if text is None:
-            text = unicode(DateTime.encode(value))
+            text = str(DateTime.encode(value))
         value = DateTime.encode(value)
     elif type(value) is str:
         if value_type is None:
             value_type = 'string'
         if text is None:
-            text = unicode(value)
-    elif type(value) is unicode:
+            text = str(value)
+    elif type(value) is str:
         if value_type is None:
             value_type = 'string'
         if text is None:
@@ -373,10 +373,10 @@ def _set_value_and_type(element, value=None, value_type=None, text=None,
         if value_type is None:
             value_type = 'time'
         if text is None:
-            text = unicode(Duration.encode(value))
+            text = str(Duration.encode(value))
         value = Duration.encode(value)
     elif value is not None:
-        raise TypeError, 'type "%s" is unknown' % type(value)
+        raise TypeError('type "%s" is unknown' % type(value))
 
     if value_type is not None:
         element.set_attribute('office:value-type', value_type)
@@ -436,16 +436,16 @@ def get_value(element, value_type=None, try_get_text=True, get_type=False):
         value = element.get_attribute('office:string-value')
         if value is not None:
             if get_type:
-                return (unicode(value), value_type)
-            return unicode(value)
+                return (str(value), value_type)
+            return str(value)
         if try_get_text:
             value = []
             for para in element.get_elements('text:p'):
                 value.append(para.get_text(recursive=True))
             if value:
                 if get_type:
-                    return (u"\n".join(value), value_type)
-                return u"\n".join(value)
+                    return ("\n".join(value), value_type)
+                return "\n".join(value)
         if get_type:
             return (None, value_type)
         return None
@@ -459,7 +459,7 @@ def get_value(element, value_type=None, try_get_text=True, get_type=False):
             return (None, None)
         return None
 
-    raise ValueError, 'unexpected value type "%s"' % value_type
+    raise ValueError('unexpected value type "%s"' % value_type)
 
 
 
@@ -492,7 +492,7 @@ def set_value(element, value):
         element.set_attribute('text:name', name)
         return
     # Else => error
-    raise ValueError, 'set_value: unexpected element "%s"' % tag
+    raise ValueError('set_value: unexpected element "%s"' % tag)
 
 
 
@@ -543,7 +543,7 @@ def obsolete(old_name, new_func, *args, **kw):
 
 
 def isiterable(obj):
-    if isinstance(obj, basestring):
+    if isinstance(obj, str):
         return False
     try:
         iter(obj)

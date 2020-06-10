@@ -29,12 +29,12 @@
 
 # Import from the Standard Library
 import os
-from cStringIO import StringIO
+from io import StringIO
 from ftplib import FTP
 from os import mkdir
 from shutil import rmtree
 from unittest import TestCase, main
-from urllib import urlopen
+from urllib.request import urlopen
 
 # Import from lpod
 from lpod.const import ODF_EXTENSIONS, ODF_CONTENT, ODF_META
@@ -136,7 +136,7 @@ class ContainerTestCase(TestCase):
     def test_get_part_xml(self):
         container = odf_get_container('samples/example.odt')
         content = container.get_part(ODF_CONTENT)
-        self.assert_('<office:document-content' in content)
+        self.assertTrue('<office:document-content' in content)
 
 
     def test_get_part_mimetype(self):
@@ -153,7 +153,7 @@ class ContainerTestCase(TestCase):
     def test_odf_xml_part_xml(self):
         container = odf_get_container('samples/example.xml')
         meta = container.get_part('meta')
-        self.assert_(meta.startswith('<office:document-meta>'))
+        self.assertTrue(meta.startswith('<office:document-meta>'))
 
 
     def test_set_part(self):
@@ -227,7 +227,7 @@ class ContainerSaveTestCase(TestCase):
         container.save('trash/example_f.odt', packaging='folder')
         new_container = odf_get_container('trash/example_f.odt.folder')
         content = new_container.get_part(ODF_CONTENT)
-        self.assert_('<office:document-content' in content)
+        self.assertTrue('<office:document-content' in content)
         mimetype = new_container.get_part('mimetype')
         self.assertEqual(mimetype, ODF_EXTENSIONS['odt'])
         path = 'Pictures/a.jpg'

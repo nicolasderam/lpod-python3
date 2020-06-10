@@ -40,7 +40,7 @@ class TestSpan(TestCase):
 
 
     def test_create_span(self):
-        span = odf_create_span(u'my text', style='my_style')
+        span = odf_create_span('my text', style='my_style')
         expected = ('<text:span text:style-name="my_style">'
                       'my text'
                     '</text:span>')
@@ -80,7 +80,7 @@ class TestSpan(TestCase):
 
     def test_insert_span(self):
         body = self.body.clone()
-        span = odf_create_span('my_style', u'my text')
+        span = odf_create_span('my_style', 'my text')
         paragraph = body.get_paragraph(position=0)
         paragraph.append(span)
 

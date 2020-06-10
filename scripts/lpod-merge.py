@@ -58,7 +58,7 @@ def init_doc(filename, mimetype):
         output_doc = odf_new_document('spreadsheet')
         add_csv(filename, output_doc)
     else:
-        raise NotImplementedError, mimetype
+        raise NotImplementedError(mimetype)
     return output_doc
 
 
@@ -99,13 +99,13 @@ def add_odt(filename, output_doc):
 def _get_table_name(name, output_body):
     if isinstance(name, str):
         encoding = stdout.encoding or 'utf8'
-        name = unicode(name, encoding)
+        name = str(name, encoding)
     already_names = set([ table.get_name()
                           for table in output_body.get_tables() ])
     if name in already_names:
         i = 1
         while True:
-            new_name = u"%s_%d" % (name, i)
+            new_name = "%s_%d" % (name, i)
             if new_name not in already_names:
                 return new_name
             i += 1
@@ -159,7 +159,7 @@ def add_odp(filename, output_doc):
         if name in already_names:
             i = 1
             while True:
-                new_name = u"%s_%d" % (name, i)
+                new_name = "%s_%d" % (name, i)
                 if new_name not in already_names:
                     name = new_name
                     break

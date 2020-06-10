@@ -31,6 +31,6 @@
 ########
 ########
 
-from paragraph import _odf_create_span
+from .paragraph import _odf_create_span
 
 odf_create_span = _odf_create_span

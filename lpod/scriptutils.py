@@ -27,7 +27,7 @@
 # Import from the Standard Library
 from mimetypes import guess_type
 from os.path import exists, isfile
-from StringIO import StringIO
+from io import StringIO
 from sys import stdin, stdout, stderr
 
 # Import from lpod

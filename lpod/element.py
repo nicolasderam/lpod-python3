@@ -37,10 +37,10 @@ from lxml.etree import _ElementStringResult, _ElementUnicodeResult
 from lxml.etree import XPath
 
 # Import from lpod
-from datatype import DateTime, Boolean
-from utils import _get_abspath, _get_elements, _get_element
-from utils import _get_style_tagname, get_value  #, obsolete
-from utils import _get_style_tagname, get_value
+from .datatype import DateTime, Boolean
+from .utils import _get_abspath, _get_elements, _get_element
+from .utils import _get_style_tagname, get_value  #, obsolete
+from .utils import _get_style_tagname, get_value
 
 
 ODF_NAMESPACES = {
@@ -79,7 +79,7 @@ ODF_NAMESPACES = {
 }
 
 
-FIRST_CHILD, LAST_CHILD, NEXT_SIBLING, PREV_SIBLING, STOPMARKER = range(5)
+FIRST_CHILD, LAST_CHILD, NEXT_SIBLING, PREV_SIBLING, STOPMARKER = list(range(5))
 
 
 ns_stripper = re.compile(r' xmlns:\w*="[\w:\-\/\.#]*"')
@@ -111,7 +111,7 @@ def _decode_qname(qname):
 def _uri_to_prefix(uri):
     """Find the prefix associated to the given URI.
     """
-    for key, value in ODF_NAMESPACES.iteritems():
+    for key, value in ODF_NAMESPACES.items():
         if value == uri:
             return key
     raise ValueError('uri "%s" not found' % uri)
@@ -214,19 +214,22 @@ def _make_odf_element(native_element, cache=None):
 def odf_create_element(element_data, cache=None):
     if type(element_data) is str:
         pass
-    elif type(element_data) is unicode:
-        element_data = element_data.encode('utf-8')
     else:
         raise TypeError("element data is not str or unicode")
     element_data = element_data.strip()
+    #element_data = element_data.encode('utf-8')
     if not element_data:
         raise ValueError("element data is empty")
     if '<' not in element_data:
         # Qualified name
         # XXX don't build the element from scratch or lxml will pollute with
         # repeated namespace declarations
+        if type(element_data) is str:
+            element_data = element_data.encode()
         element_data = '<%s/>' % element_data
     # XML fragment
+    if type(element_data) is str:
+        element_data = element_data.encode()
     data = ns_document_data % element_data
     root = fromstring(data)
     element = root[0]
@@ -240,7 +243,7 @@ def _debug_element(native_element):
 
 
 
-class odf_text(unicode):
+class odf_text(str):
     """Representation of an XML text node. Created to hide the specifics of
     lxml in searching text nodes using XPath.
 
@@ -591,7 +594,7 @@ class odf_element(object):
     def get_attributes(self):
         attributes = {}
         element = self.__element
-        for key, value in element.attrib.iteritems():
+        for key, value in element.attrib.items():
             attributes[_get_prefixed_name(key)] = value
         # FIXME lxml has mixed bytestring and unicode
         return attributes
@@ -607,7 +610,7 @@ class odf_element(object):
             return None
         elif value in ('true', 'false'):
             return Boolean.decode(value)
-        return unicode(value)
+        return str(value)
 
 
     def set_attribute(self, name, value):
@@ -648,11 +651,11 @@ class odf_element(object):
         If recursive is True, all text contents of the subtree.
         """
         if recursive:
-            return u''.join(self.__element.itertext())
+            return ''.join(self.__element.itertext())
         text = self.__element.text
         if text is None:
             return None
-        return unicode(text)
+        return str(text)
 
 
     def set_text(self, text):
@@ -672,7 +675,7 @@ class odf_element(object):
         tail = self.__element.tail
         if tail is None:
             return None
-        return unicode(tail)
+        return str(tail)
 
 
     def set_tail(self, text):
@@ -697,7 +700,7 @@ class odf_element(object):
         """
         if isinstance(pattern, str):
             # Fail properly if the pattern is an non-ascii bytestring
-            pattern = unicode(pattern)
+            pattern = str(pattern)
         text = self.get_text(recursive=True)
         match = re.search(pattern, text)
         if match is None:
@@ -740,7 +743,7 @@ class odf_element(object):
         """
         if isinstance(pattern, str):
             # Fail properly if the pattern is an non-ascii bytestring
-            pattern = unicode(pattern)
+            pattern = str(pattern)
         cpattern = re.compile(pattern)
         count = 0
         for text in self.xpath('descendant::text()'):
@@ -809,7 +812,7 @@ class odf_element(object):
         text = []
         for child in self.get_elements('descendant::text:p'):
             text.append(child.get_text(recursive=True))
-        return u"\n".join(text)
+        return "\n".join(text)
 
 
     def _erase_text_content(self):
@@ -1104,20 +1107,20 @@ class odf_element(object):
         current = self.__element
 
         # Unicode ?
-        if isinstance(unicode_or_element, unicode):
+        if isinstance(unicode_or_element, str):
             # Has children ?
             children = current.getchildren()
             if children:
                 # Append to tail of the last child
                 last_child = children[-1]
                 text = last_child.tail
-                text = text if text is not None else u""
+                text = text if text is not None else ""
                 text += unicode_or_element
                 last_child.tail = text
             else:
                 # Append to text of the element
                 text = current.text
-                text = text if text is not None else u""
+                text = text if text is not None else ""
                 text += unicode_or_element
                 current.text = text
         elif isinstance(unicode_or_element, odf_element):
@@ -1267,7 +1270,7 @@ class odf_element(object):
                 return (element, False)
             element.clear()
             try:
-                for key, value in copy.get_attributes().iteritems():
+                for key, value in copy.get_attributes().items():
                     element.set_attribute(key, value)
             except ValueError:
                 sys.stderr.write("strip_tags(): bad attribute in %s\n" % copy)
@@ -1377,7 +1380,7 @@ class odf_element(object):
     def get_formatted_text(self, context):
         """This function must return a beautiful version of the text
         """
-        return u''
+        return ''
 
 
     def get_styled_elements(self, name=True):

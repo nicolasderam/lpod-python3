@@ -26,9 +26,9 @@
 #
 
 # Import from lpod
-from element import odf_create_element
+from .element import odf_create_element
 #from utils import obsolete
-from xmlpart import odf_xmlpart
+from .xmlpart import odf_xmlpart
 
 
 def odf_create_file_entry(full_path, media_type):

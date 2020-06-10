@@ -44,7 +44,7 @@ class TestTrackedChanges(TestCase):
 
     def test_get_tracked_changes(self):
         tracked_changes = self.body.get_tracked_changes()
-        self.assert_(isinstance(tracked_changes, odf_tracked_changes))
+        self.assertTrue(isinstance(tracked_changes, odf_tracked_changes))
 
 
 
@@ -62,7 +62,7 @@ class TestChangedRegionTestCase(TestCase):
 
 
     def test_get_changed_region_list_creator(self):
-        creator = u'Romain Gauthier'
+        creator = 'Romain Gauthier'
         tracked_changes = self.tracked_changes
         regions = tracked_changes.get_changed_regions(creator=creator)
         expected = ('<text:changed-region text:id="ct-1371898904">\n'
@@ -95,7 +95,7 @@ class TestChangedRegionTestCase(TestCase):
 
     def test_get_changed_region_list_regex(self):
         tracked_changes = self.tracked_changes
-        regions = tracked_changes.get_changed_regions(content=ur'amis')
+        regions = tracked_changes.get_changed_regions(content=r'amis')
         expected = ('<text:changed-region text:id="ct-1371898456">\n'
                     '     <text:deletion>\n'
                     '      <office:change-info>\n'
@@ -123,7 +123,7 @@ class TestChangedRegionTestCase(TestCase):
 
 
     def test_get_changed_region_by_creator(self):
-        creator = u'David Versmisse'
+        creator = 'David Versmisse'
         tracked_changes = self.tracked_changes
         region = tracked_changes.get_changed_region(creator=creator)
         expected = ('<text:changed-region text:id="ct-1371898456">\n'
@@ -155,7 +155,7 @@ class TestChangedRegionTestCase(TestCase):
 
     def test_get_changed_region_by_content(self):
         tracked_changes = self.tracked_changes
-        region = tracked_changes.get_changed_region(content=ur'les')
+        region = tracked_changes.get_changed_region(content=r'les')
         expected = ('<text:changed-region text:id="ct-1371898904">\n'
                     '     <text:deletion>\n'
                     '      <office:change-info>\n'
@@ -178,7 +178,7 @@ class TestChangesIdsTestCase(TestCase):
 
 
     def test_get_changes_ids(self):
-        paragraph = self.body.get_paragraph(content=ur'Bonjour')
+        paragraph = self.body.get_paragraph(content=r'Bonjour')
         changes_ids = paragraph.get_changes_ids()
         expected = ['ct-1371898904', 'ct-1371898680', 'ct-1371898456']
         self.assertEqual(changes_ids, expected)

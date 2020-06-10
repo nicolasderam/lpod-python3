@@ -26,12 +26,12 @@
 #
 
 # Import from lpod
-from element import odf_create_element, odf_element, register_element_class
-from datatype import Unit
-from image import odf_create_image
-from paragraph import odf_create_paragraph
-from style import odf_create_style
-from utils import isiterable, DPI # , obsolete
+from .element import odf_create_element, odf_element, register_element_class
+from .datatype import Unit
+from .image import odf_create_image
+from .paragraph import odf_create_paragraph
+from .style import odf_create_style
+from .utils import isiterable, DPI # , obsolete
 
 
 
@@ -202,7 +202,7 @@ def odf_create_text_frame(text_or_element=None, text_style=None, name=None,
 
 
 
-def odf_create_frame_position_style(name=u"FramePosition",
+def odf_create_frame_position_style(name="FramePosition",
         horizontal_pos="from-left", vertical_pos="from-top",
         horizontal_rel="paragraph", vertical_rel="paragraph"):
     """Helper style for positioning frames in desktop applications that need
@@ -213,7 +213,7 @@ def odf_create_frame_position_style(name=u"FramePosition",
     Use the return value as the frame style or build a new graphic style with
     this style as the parent.
     """
-    return odf_create_style('graphic', u"FramePositioning",
+    return odf_create_style('graphic', "FramePositioning",
             **{'style:horizontal-pos': "from-left",
                 'style:vertical-pos': "from-top",
                 'style:horizontal-rel': "paragraph",
@@ -446,7 +446,7 @@ class odf_frame(odf_element):
         if not isiterable(text_or_element):
             text_or_element = [text_or_element]
         for item in text_or_element:
-            if isinstance(item, unicode):
+            if isinstance(item, str):
                 item = odf_create_paragraph(item, style=text_style)
             text_box.append(item)
         return text_box
@@ -472,31 +472,31 @@ class odf_frame(odf_element):
                     # Insert or not ?
                     if context['no_img_level']:
                         context['img_counter'] += 1
-                        ref = u'|img%d|' % context['img_counter']
+                        ref = '|img%d|' % context['img_counter']
                         result.append(ref)
                         context['images'].append( (ref, filename,
                                                    (width, height) ) )
                     else:
-                        result.append(u'\n.. image:: %s\n' % filename)
+                        result.append('\n.. image:: %s\n' % filename)
                         if width is not None:
-                            result.append(u'   :width: %s\n' % width)
+                            result.append('   :width: %s\n' % width)
                         if height is not None:
-                            result.append(u'   :height: %s\n' % height)
+                            result.append('   :height: %s\n' % height)
                 else:
-                    result.append(u'[Image %s]\n' %
+                    result.append('[Image %s]\n' %
                                   element.get_attribute('xlink:href'))
             elif tag == 'draw:text-box':
-                subresult = [u'  ']
+                subresult = ['  ']
                 for element in element.get_children():
                     subresult.append(element.get_formatted_text(context))
-                subresult = u''.join(subresult)
-                subresult = subresult.replace(u'\n', u'\n  ')
+                subresult = ''.join(subresult)
+                subresult = subresult.replace('\n', '\n  ')
                 subresult.rstrip(' ')
                 result.append(subresult)
             else:
                 result.append(element.get_formatted_text(context))
-        result.append(u'\n')
-        return u''.join(result)
+        result.append('\n')
+        return ''.join(result)
 
 
 

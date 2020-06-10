@@ -42,7 +42,7 @@ class TestFrame(TestCase):
 
 
     def test_create_frame(self):
-        frame = odf_create_frame(u"A Frame", size=('10cm', '10cm'),
+        frame = odf_create_frame("A Frame", size=('10cm', '10cm'),
                                  style='Graphics')
         expected = ('<draw:frame svg:width="10cm" svg:height="10cm" '
                       'draw:z-index="0" draw:name="A Frame" '
@@ -51,7 +51,7 @@ class TestFrame(TestCase):
 
 
     def test_create_frame_page(self):
-        frame = odf_create_frame(u"Another Frame", size=('10cm', '10cm'),
+        frame = odf_create_frame("Another Frame", size=('10cm', '10cm'),
                                  anchor_type='page', page_number=1,
                                  position=('10mm', '10mm'), style='Graphics')
         expected = ('<draw:frame svg:width="10cm" svg:height="10cm" '
@@ -70,43 +70,43 @@ class TestFrame(TestCase):
 
     def test_get_frame_list_title(self):
         body = self.body
-        result = body.get_frames(title=u"Intitulé")
+        result = body.get_frames(title="Intitulé")
         self.assertEqual(len(result), 1)
         self.assertEqual(result[0].get_tag(), 'draw:frame')
 
 
     def test_get_frame_by_name(self):
         body = self.body
-        frame = body.get_frame(name=u"Logo")
+        frame = body.get_frame(name="Logo")
         self.assertEqual(frame.get_tag(), 'draw:frame')
 
 
     def test_get_frame_by_position(self):
         body = self.body
         frame = body.get_frame(position=3)
-        self.assertEqual(frame.get_attribute('presentation:class'), u'notes')
+        self.assertEqual(frame.get_attribute('presentation:class'), 'notes')
 
 
     def test_get_frame_by_description(self):
         body = self.body
-        frame = body.get_frame(description=u"描述")
+        frame = body.get_frame(description="描述")
         self.assertEqual(frame.get_tag(), 'draw:frame')
 
 
     def test_insert_frame(self):
         body = self.body.clone()
-        frame1 = odf_create_frame(u"frame1", size=('10cm', '10cm'),
+        frame1 = odf_create_frame("frame1", size=('10cm', '10cm'),
                                   style='Graphics')
-        frame2 = odf_create_frame(u"frame2", size=('10cm', '10cm'),
+        frame2 = odf_create_frame("frame2", size=('10cm', '10cm'),
                                   page_number=1, position=('10mm', '10mm'),
                                   style='Graphics')
         body.append(frame1)
         body.append(frame2)
         result = body.get_frames(style='Graphics')
         self.assertEqual(len(result), 2)
-        element = body.get_frame(name=u"frame1")
+        element = body.get_frame(name="frame1")
         self.assertEqual(element.get_tag(), 'draw:frame')
-        element = body.get_frame(name=u"frame2")
+        element = body.get_frame(name="frame2")
         self.assertEqual(element.get_tag(), 'draw:frame')
 
 
@@ -126,7 +126,7 @@ class TestImageFrame(TestCase):
 
     def test_create_image_frame_text(self):
         frame = odf_create_image_frame('Pictures/zoe.jpg',
-                                         text=u"Zoé")
+                                         text="Zoé")
         expected = ('<draw:frame svg:width="1cm" svg:height="1cm" '
                       'draw:z-index="0">'
                       '<draw:image xlink:href="Pictures/zoe.jpg" '
@@ -141,7 +141,7 @@ class TestImageFrame(TestCase):
 class TestTextFrame(TestCase):
 
     def test_create_text_frame(self):
-        frame = odf_create_text_frame(u"Zoé")
+        frame = odf_create_text_frame("Zoé")
         expected = ('<draw:frame svg:width="1cm" svg:height="1cm" '
                       'draw:z-index="0">'
                       '<draw:text-box>'
@@ -152,7 +152,7 @@ class TestTextFrame(TestCase):
 
 
     def test_create_text_frame_element(self):
-        heading = odf_create_heading(1, u"Zoé")
+        heading = odf_create_heading(1, "Zoé")
         frame = odf_create_text_frame(heading)
         expected = ('<draw:frame svg:width="1cm" svg:height="1cm" '
                       'draw:z-index="0">'
@@ -178,7 +178,7 @@ class TestOdfFrame(TestCase):
     def test_get_frame(self):
         body = self.body
         frame = body.get_frame()
-        self.assert_(isinstance(frame, odf_frame))
+        self.assertTrue(isinstance(frame, odf_frame))
 
 
     def test_get_frame_size(self):

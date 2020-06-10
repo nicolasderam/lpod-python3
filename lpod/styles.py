@@ -26,8 +26,8 @@
 #
 
 # Import from lpod
-from xmlpart import odf_xmlpart
-from utils import _get_elements, _get_element  #, obsolete
+from .xmlpart import odf_xmlpart
+from .utils import _get_elements, _get_element  #, obsolete
 
 
 
@@ -68,7 +68,7 @@ class odf_styles(odf_xmlpart):
                     self.get_element('//office:font-face-decls'))
         queries = context_mapping.get(family)
         if queries is None:
-            raise ValueError, "unknown family: " + family
+            raise ValueError("unknown family: " + family)
         return [self.get_element(query) for query in queries]
 
 

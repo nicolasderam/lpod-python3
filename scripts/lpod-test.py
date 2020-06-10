@@ -51,4 +51,4 @@ if  __name__ == "__main__":
     document = args[0]
 
     # Finish me :-)
-    print _run_command(["odflint", document])
+    print(_run_command(["odflint", document]))

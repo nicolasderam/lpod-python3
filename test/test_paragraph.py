@@ -73,25 +73,25 @@ class TestParagraph(TestCase):
 
     def test_get_paragraph_by_content(self):
         body = self.body
-        regex = ur'(first|second|a) paragraph'
+        regex = r'(first|second|a) paragraph'
         paragraph = body.get_paragraph(content=regex)
         text = paragraph.get_text()
-        self.assertEqual(text, u'This is the first paragraph.')
+        self.assertEqual(text, 'This is the first paragraph.')
 
 
     def test_get_paragraph_by_content_context(self):
         body = self.body
         section2 = body.get_section(position=1)
-        regex = ur'([Ff]irst|second|a) paragraph'
+        regex = r'([Ff]irst|second|a) paragraph'
         paragraph = section2.get_paragraph(content=regex)
         text = paragraph.get_text()
-        self.assertEqual(text, u'First paragraph of the second section.')
+        self.assertEqual(text, 'First paragraph of the second section.')
 
 
     def test_odf_paragraph(self):
         body = self.body
         paragraph = body.get_paragraph()
-        self.assert_(isinstance(paragraph, odf_paragraph))
+        self.assertTrue(isinstance(paragraph, odf_paragraph))
 
 
     def test_get_paragraph(self):
@@ -104,11 +104,11 @@ class TestParagraph(TestCase):
 
     def test_insert_paragraph(self):
         body = self.body.clone()
-        paragraph = odf_create_paragraph(u'An inserted test',
+        paragraph = odf_create_paragraph('An inserted test',
                                          style='Text_20_body')
         body.append(paragraph)
         last_paragraph = body.get_paragraphs()[-1]
-        self.assertEqual(last_paragraph.get_text(), u'An inserted test')
+        self.assertEqual(last_paragraph.get_text(), 'An inserted test')
 
 
     def test_get_paragraph_missed(self):
@@ -151,7 +151,7 @@ class TestParagraphItems(TestCase):
 
 
     def test_append_plain_text_unicode(self):
-        txt = u'A test,\n   \twith \n\n some é and \t and     5 spaces.'
+        txt = 'A test,\n   \twith \n\n some é and \t and     5 spaces.'
         para = odf_create_paragraph()
         para.append_plain_text(txt)
         expected = ('<text:p>A test,<text:line-break/> <text:s text:c="2"/>'
@@ -197,9 +197,9 @@ class TestParagraphItems(TestCase):
 class TestSetSpan(TestCase):
 
     def test_text(self):
-        text = u"Le Père Noël a une moustache rouge."
+        text = "Le Père Noël a une moustache rouge."
         paragraph = odf_create_paragraph(text)
-        paragraph.set_span(u"highlight", regex=u"rouge")
+        paragraph.set_span("highlight", regex="rouge")
         expected = ('<text:p>Le P&#232;re No&#235;l a une moustache '
                       '<text:span '
                         'text:style-name="highlight">rouge</text:span>.'
@@ -208,10 +208,10 @@ class TestSetSpan(TestCase):
 
 
     def test_tail(self):
-        data = (u"<text:p>Le Père Noël a une "
-                  u"<text:span>moustache</text:span> rouge.</text:p>")
+        data = ("<text:p>Le Père Noël a une "
+                  "<text:span>moustache</text:span> rouge.</text:p>")
         paragraph = odf_create_element(data)
-        paragraph.set_span(u"highlight", regex=u"rouge")
+        paragraph.set_span("highlight", regex="rouge")
         expected = ('<text:p>Le P&#232;re No&#235;l a une '
                       '<text:span>moustache</text:span> '
                       '<text:span '
@@ -221,9 +221,9 @@ class TestSetSpan(TestCase):
 
 
     def test_text_several(self):
-        text = u"Le Père rouge a une moustache rouge."
+        text = "Le Père rouge a une moustache rouge."
         paragraph = odf_create_paragraph(text)
-        paragraph.set_span(u"highlight", regex=u"rouge")
+        paragraph.set_span("highlight", regex="rouge")
         expected = ('<text:p>Le P&#232;re '
                       '<text:span '
                          'text:style-name="highlight">rouge</text:span> '
@@ -235,10 +235,10 @@ class TestSetSpan(TestCase):
 
 
     def test_tail_several(self):
-        data = (u"<text:p>Le <text:span>Père</text:span> rouge a une "
-                  u"moustache rouge.</text:p>")
+        data = ("<text:p>Le <text:span>Père</text:span> rouge a une "
+                  "moustache rouge.</text:p>")
         paragraph = odf_create_element(data)
-        paragraph.set_span(u"highlight", regex=u"rouge")
+        paragraph.set_span("highlight", regex="rouge")
         expected = ('<text:p>Le <text:span>P&#232;re</text:span> '
                       '<text:span '
                         'text:style-name="highlight">rouge</text:span> '
@@ -250,9 +250,9 @@ class TestSetSpan(TestCase):
 
 
     def test_offset(self):
-        text = u"Le Père Noël a une moustache rouge."
+        text = "Le Père Noël a une moustache rouge."
         paragraph = odf_create_paragraph(text)
-        paragraph.set_span(u"highlight", offset=text.index(u"moustache"))
+        paragraph.set_span("highlight", offset=text.index("moustache"))
         expected = ('<text:p>Le P&#232;re No&#235;l a une '
                       '<text:span text:style-name="highlight">moustache '
                       'rouge.</text:span>'
@@ -261,10 +261,10 @@ class TestSetSpan(TestCase):
 
 
     def test_offset_length(self):
-        text = u"Le Père Noël a une moustache rouge."
+        text = "Le Père Noël a une moustache rouge."
         paragraph = odf_create_paragraph(text)
-        paragraph.set_span(u"highlight", offset=text.index(u"moustache"),
-                           length=len(u"moustache"))
+        paragraph.set_span("highlight", offset=text.index("moustache"),
+                           length=len("moustache"))
         expected = ('<text:p>Le P&#232;re No&#235;l a une '
                       '<text:span text:style-name="highlight">moustache'
                       '</text:span> rouge.'
@@ -283,84 +283,84 @@ class TestPraragraphReferences(TestCase):
     def test_set_reference_mark_single(self):
         body = self.body
         para = body.get_paragraph()
-        para.set_reference_mark(u'one', position=0)
-        expected = (u'<text:p text:style-name="Text_20_body">'
-                    u'<text:reference-mark text:name="one"/>'
-                    u'This is the first paragraph.</text:p>')
+        para.set_reference_mark('one', position=0)
+        expected = ('<text:p text:style-name="Text_20_body">'
+                    '<text:reference-mark text:name="one"/>'
+                    'This is the first paragraph.</text:p>')
         self.assertEqual(para.serialize(), expected)
 
 
     def test_set_reference_mark_single_2(self):
         body = self.body
         para = body.get_paragraph()
-        para.set_reference_mark(u'one', position=2)
-        expected = (u'<text:p text:style-name="Text_20_body">'
-                    u'Th'
-                    u'<text:reference-mark text:name="one"/>'
-                    u'is is the first paragraph.</text:p>')
+        para.set_reference_mark('one', position=2)
+        expected = ('<text:p text:style-name="Text_20_body">'
+                    'Th'
+                    '<text:reference-mark text:name="one"/>'
+                    'is is the first paragraph.</text:p>')
         self.assertEqual(para.serialize(), expected)
 
 
     def test_set_reference_mark_content(self):
         body = self.body
         para = body.get_paragraph()
-        para.set_reference_mark(u'one', content=para)
-        expected = (u'<text:p text:style-name="Text_20_body">'
-                    u'<text:reference-mark-start text:name="one"/>'
-                    u'This is the first paragraph.'
-                    u'<text:reference-mark-end text:name="one"/>'
-                    u'</text:p>')
+        para.set_reference_mark('one', content=para)
+        expected = ('<text:p text:style-name="Text_20_body">'
+                    '<text:reference-mark-start text:name="one"/>'
+                    'This is the first paragraph.'
+                    '<text:reference-mark-end text:name="one"/>'
+                    '</text:p>')
         self.assertEqual(para.serialize(), expected)
 
 
     def test_set_reference_mark_content_pos(self):
         body = self.body
         para = body.get_paragraph()
-        para.set_reference_mark(u'one', position=(2, 4))
-        expected = (u'<text:p text:style-name="Text_20_body">'
-                    u'Th'
-                    u'<text:reference-mark-start text:name="one"/>'
-                    u'is'
-                    u'<text:reference-mark-end text:name="one"/>'
-                    u' is the first paragraph.'
-                    u'</text:p>')
+        para.set_reference_mark('one', position=(2, 4))
+        expected = ('<text:p text:style-name="Text_20_body">'
+                    'Th'
+                    '<text:reference-mark-start text:name="one"/>'
+                    'is'
+                    '<text:reference-mark-end text:name="one"/>'
+                    ' is the first paragraph.'
+                    '</text:p>')
         self.assertEqual(para.serialize(), expected)
 
 
     def test_set_reference_mark_content_2(self):
         body = self.body
         para = body.get_paragraph()
-        para.set_reference_mark(u'one', content=u'first paragraph.')
-        expected = (u'<text:p text:style-name="Text_20_body">'
-                    u'This is the '
-                    u'<text:reference-mark-start text:name="one"/>'
-                    u'first paragraph.'
-                    u'<text:reference-mark-end text:name="one"/>'
-                    u'</text:p>')
+        para.set_reference_mark('one', content='first paragraph.')
+        expected = ('<text:p text:style-name="Text_20_body">'
+                    'This is the '
+                    '<text:reference-mark-start text:name="one"/>'
+                    'first paragraph.'
+                    '<text:reference-mark-end text:name="one"/>'
+                    '</text:p>')
         self.assertEqual(para.serialize(), expected)
 
 
     def test_set_reference_mark_after(self):
         body = self.body
         para = body.get_paragraph()
-        para.set_reference_mark(u'one', after=u'first')
-        expected = (u'<text:p text:style-name="Text_20_body">'
-                    u'This is the first'
-                    u'<text:reference-mark text:name="one"/>'
-                    u' paragraph.'
-                    u'</text:p>')
+        para.set_reference_mark('one', after='first')
+        expected = ('<text:p text:style-name="Text_20_body">'
+                    'This is the first'
+                    '<text:reference-mark text:name="one"/>'
+                    ' paragraph.'
+                    '</text:p>')
         self.assertEqual(para.serialize(), expected)
 
 
     def test_set_reference_mark_before(self):
         body = self.body
         para = body.get_paragraph()
-        para.set_reference_mark(u'one', before=u'first')
-        expected = (u'<text:p text:style-name="Text_20_body">'
-                    u'This is the '
-                    u'<text:reference-mark text:name="one"/>'
-                    u'first paragraph.'
-                    u'</text:p>')
+        para.set_reference_mark('one', before='first')
+        expected = ('<text:p text:style-name="Text_20_body">'
+                    'This is the '
+                    '<text:reference-mark text:name="one"/>'
+                    'first paragraph.'
+                    '</text:p>')
         self.assertEqual(para.serialize(), expected)
 
 

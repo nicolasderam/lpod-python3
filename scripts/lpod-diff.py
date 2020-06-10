@@ -71,14 +71,14 @@ if  __name__ == '__main__':
     # Make the diff !
     if options.ndiff:
         result = ndiff(text1, text2, None, None)
-        result = [ line for line in result if not line.startswith(u' ') ]
+        result = [ line for line in result if not line.startswith(' ') ]
     else:
         fromdate = ctime(stat(args[0]).st_mtime)
         todate = ctime(stat(args[1]).st_mtime)
         result = unified_diff(text1, text2, args[0], args[1], fromdate, todate)
-    result = u''.join(result)
+    result = ''.join(result)
     encoding = stdout.encoding if stdout.encoding is not None else 'utf-8'
     result = result.encode(encoding)
 
     # And print it !
-    print result
+    print(result)

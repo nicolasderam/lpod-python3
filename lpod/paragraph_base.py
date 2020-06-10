@@ -31,12 +31,12 @@
 import re
 
 # Import from lpod
-from element import odf_text
-from element import odf_element, odf_create_element
+from .element import odf_text
+from .element import odf_element, odf_create_element
 
 
-_rsplitter = re.compile(u'(\n|\t|  +)', re.UNICODE)
-_rspace = re.compile(u'^  +$', re.UNICODE)
+_rsplitter = re.compile('(\n|\t|  +)', re.UNICODE)
+_rspace = re.compile('^  +$', re.UNICODE)
 
 
 
@@ -143,11 +143,11 @@ def _get_formatted_text(element, context, with_text=True):
                 body = obj.get_body()
                 container.append((citation, body))
                 if rst_mode:
-                    marker = {'footnote': u" [#]_ ",
-                              'endnote': u" [*]_ "}[note_class]
+                    marker = {'footnote': " [#]_ ",
+                              'endnote': " [*]_ "}[note_class]
                 else:
-                    marker = {'footnote': u"[{citation}]",
-                              'endnote': u"({citation})"}[note_class]
+                    marker = {'footnote': "[{citation}]",
+                              'endnote': "({citation})"}[note_class]
                 result.append(marker.format(citation=citation))
             # Annotations
             elif tag == 'office:annotation':
@@ -158,16 +158,16 @@ def _get_formatted_text(element, context, with_text=True):
                     result.append('[*]')
             # Tabulation
             elif tag == 'text:tab':
-                result.append(u'\t')
+                result.append('\t')
             # Line break
             elif tag == 'text:line-break':
                 if rst_mode:
-                    result.append(u"\n|")
+                    result.append("\n|")
                 else:
-                    result.append(u"\n")
+                    result.append("\n")
             else:
                 result.append(obj.get_formatted_text(context))
-    return u''.join(result)
+    return ''.join(result)
 
 
 
@@ -260,11 +260,11 @@ class paragraph_base(odf_element):
             return content + '\n\n'
 
 
-    def append_plain_text(self, text=u'', encoding=None):
+    def append_plain_text(self, text='', encoding=None):
         """Append unicode plain text to the paragraph, replacing <CR>, <TAB>
            and multiple spaces by ODF corresponding tags.
         """
-        if not isinstance(text, unicode):
+        if not isinstance(text, str):
             if encoding:
                 text = text.decode(encoding)
             else:
@@ -273,15 +273,15 @@ class paragraph_base(odf_element):
         for b in blocs:
             if not b:
                 continue
-            if b == u'\n':
+            if b == '\n':
                 self.append(odf_create_line_break())
                 continue
-            if b == u'\t':
+            if b == '\t':
                 self.append(odf_create_tabulation())
                 continue
             if _rspace.match(b):
                 # follow ODF standard : n spaces => one space + spacer(n-1)
-                self.append(u' ')
+                self.append(' ')
                 self.append(odf_create_spaces(len(b) - 1))
                 continue
             # standard piece of text:

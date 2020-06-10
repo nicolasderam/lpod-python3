@@ -53,6 +53,6 @@ if  __name__ == '__main__':
     indoc = odf_get_document(args[0])
     outdoc, error_nb = clean_document(indoc)
     if error_nb != 0:
-        print '%d error(s) fixed.' % error_nb
+        print('%d error(s) fixed.' % error_nb)
     outdoc.save(target=args[1])
 

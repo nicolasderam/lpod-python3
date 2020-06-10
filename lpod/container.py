@@ -30,16 +30,16 @@ import os
 import sys
 import shutil
 from copy import deepcopy
-from cStringIO import StringIO
+from io import StringIO
 from zipfile import ZIP_DEFLATED, ZIP_STORED, ZipFile, BadZipfile
 
 # Import from lpod
-from const import ODF_MIMETYPES, ODF_PARTS, ODF_TYPES, ODF_MANIFEST
-from const import ODF_CONTENT, ODF_META, ODF_SETTINGS, ODF_STYLES
-from const import ODF_EXTENSIONS
-from manifest import odf_manifest
-from utils import _get_abspath  #, obsolete
-from scriptutils import printwarn
+from .const import ODF_MIMETYPES, ODF_PARTS, ODF_TYPES, ODF_MANIFEST
+from .const import ODF_CONTENT, ODF_META, ODF_SETTINGS, ODF_STYLES
+from .const import ODF_EXTENSIONS
+from .manifest import odf_manifest
+from .utils import _get_abspath  #, obsolete
+from .scriptutils import printwarn
 
 
 class odf_container(object):
@@ -53,7 +53,7 @@ class odf_container(object):
 
     def __init__(self, path_or_file):
         want_folder = False
-        if isinstance(path_or_file, basestring):
+        if isinstance(path_or_file, str):
             # Path
             self.path = path = path_or_file
             if os.path.isdir(path): # opening a folder
@@ -187,7 +187,7 @@ class odf_container(object):
             compression = ZIP_STORED
             filezip = ZipFile(file, 'w', compression=compression)
         # Parts to save, except manifest at the end
-        part_names = parts.keys()
+        part_names = list(parts.keys())
         try:
             part_names.remove(ODF_MANIFEST)
         except KeyError:
@@ -276,23 +276,23 @@ class odf_container(object):
             file_name = os.path.join(folder, path)
             dir_name = os.path.dirname(file_name)
             if not os.path.exists(dir_name):
-                os.makedirs(dir_name, mode=0755)
-            if path.endswith(u'/') : # folder
+                os.makedirs(dir_name, mode=0o755)
+            if path.endswith('/') : # folder
                 if not os.path.isdir(file_name):
-                    os.makedirs(file_name.encode(encoding), mode=0777)
+                    os.makedirs(file_name.encode(encoding), mode=0o777)
             else:
-                open(file_name.encode(encoding), 'wb', 0666).write(content)
+                open(file_name.encode(encoding), 'wb', 0o666).write(content)
 
-        if isinstance(folder, basestring) and not isinstance(folder, unicode):
+        if isinstance(folder, str) and not isinstance(folder, str):
             folder = folder.decode(encoding)
         # Parts were loaded by "save"
         parts = self.__parts
         # Parts to save, except manifest at the end
-        part_names = parts.keys()
+        part_names = list(parts.keys())
         try:
             part_names.remove(ODF_MANIFEST)
         except KeyError:
-            printwarn(u"missing '%s'" % ODF_MANIFEST)
+            printwarn("missing '%s'" % ODF_MANIFEST)
         # "Pretty-save" parts in some order
         # mimetype requires to be first and uncompressed
         try:
@@ -422,7 +422,7 @@ class odf_container(object):
 
             backup -- boolean
         """
-        if isinstance(target, basestring) and not isinstance(target, unicode):
+        if isinstance(target, str) and not isinstance(target, str):
             encoding = sys.getfilesystemencoding()
             target = target.decode(encoding)
         parts = self.__parts
@@ -443,13 +443,13 @@ class odf_container(object):
         close_after = False
         if target is None:
             target = self.path
-        if isinstance(target, basestring):
+        if isinstance(target, str):
             while target.endswith(os.sep):
                 target = target[:-1]
             while target.endswith('.folder'):
                 target = target.split('.folder', 1)[0]
         if packaging in ('zip', 'flat'):
-            if isinstance(target, basestring):
+            if isinstance(target, str):
                 if backup:
                     self._do_backup(target)
                 dest_file = open(target, 'wb')
@@ -457,7 +457,7 @@ class odf_container(object):
             else:
                 dest_file = target
         if packaging == 'folder':
-            if not isinstance(target, basestring):
+            if not isinstance(target, str):
                 raise ValueError("Saving in folder format requires a folder "
                                  "name, not %s." % target)
             if not target.endswith('.folder'):
@@ -471,7 +471,7 @@ class odf_container(object):
                     except Exception as e:
                         printwarn(str(e))
 
-            os.mkdir(target, 0777)
+            os.mkdir(target, 0o777)
             dest_file = target
         # Serialize
         if packaging == 'zip':

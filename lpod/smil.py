@@ -30,7 +30,7 @@ We can find more informations here: http://www.w3.org/TR/SMIL20/
 """
 
 # Import from lpod
-from element import odf_create_element
+from .element import odf_create_element
 
 
 

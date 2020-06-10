@@ -29,6 +29,6 @@ Loading his module activate the 'experimental' compatibility mode
 (aka experimental features)
 """
 
-import _flags
+from . import _flags
 
 _flags.experimental.set(True)

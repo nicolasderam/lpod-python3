@@ -43,7 +43,7 @@ class ContentTestCase(TestCase):
 
 
     def test_get_content(self):
-        self.assert_(type(self.content) is odf_content)
+        self.assertTrue(type(self.content) is odf_content)
 
 
     def test_get_body(self):
@@ -62,8 +62,8 @@ class ContentTestCase(TestCase):
 
 
     def test_get_style(self):
-        style = self.content.get_style('section', u"Sect1")
-        self.assertEqual(style.get_name(), u"Sect1")
+        style = self.content.get_style('section', "Sect1")
+        self.assertEqual(style.get_name(), "Sect1")
         self.assertEqual(style.get_family(), 'section')
 
 

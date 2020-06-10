@@ -28,10 +28,10 @@
 # Import from the Standard Library
 
 # Import from lpod
-from element import register_element_class, odf_element, odf_create_element
-from element import FIRST_CHILD, PREV_SIBLING, NEXT_SIBLING
-from paragraph import odf_create_paragraph
-from utils import _get_element, _get_elements, isiterable  #, obsolete
+from .element import register_element_class, odf_element, odf_create_element
+from .element import FIRST_CHILD, PREV_SIBLING, NEXT_SIBLING
+from .paragraph import odf_create_paragraph
+from .utils import _get_element, _get_elements, isiterable  #, obsolete
 
 
 def odf_create_list_item(text_or_element=None):
@@ -49,12 +49,12 @@ def odf_create_list_item(text_or_element=None):
     Return: odf_element
     """
     element = odf_create_element('text:list-item')
-    if type(text_or_element) is unicode:
+    if type(text_or_element) is str:
         element.set_text_content(text_or_element)
     elif isinstance(text_or_element, odf_element):
         element.append(text_or_element)
     elif text_or_element is not None:
-        raise TypeError, "expected unicode or odf_element"
+        raise TypeError("expected unicode or odf_element")
     return element
 
 
@@ -140,7 +140,7 @@ class odf_list(odf_element):
         for element in self.get_elements('text:p'):
             self.delete(element)
         for paragraph in reversed(text_or_element):
-            if type(paragraph) is unicode:
+            if type(paragraph) is str:
                 paragraph = odf_create_paragraph(paragraph)
             self.insert(paragraph, FIRST_CHILD)
 
@@ -158,7 +158,7 @@ class odf_list(odf_element):
         elif position is not None:
             self.insert(item, position=position)
         else:
-            raise ValueError, "position must be defined"
+            raise ValueError("position must be defined")
 
 
     def append_item(self, item):
@@ -184,19 +184,19 @@ class odf_list(odf_element):
                     # A title in a list is a bug
                     return text
                 elif tag == 'text:list':
-                    if not text.lstrip().startswith(u'-'):
+                    if not text.lstrip().startswith('-'):
                         # If the list didn't indent, don't either
                         # (inner title)
                         return text
                 textbuf.append(text)
-            textbuf = u''.join(textbuf)
+            textbuf = ''.join(textbuf)
             textbuf = textbuf.strip('\n')
             # Indent the text
-            textbuf = u'- %s\n' % textbuf.replace(u'\n', u'\n  ')
+            textbuf = '- %s\n' % textbuf.replace('\n', '\n  ')
             result.append(textbuf)
         if rst_mode:
             result.append('\n')
-        return u''.join(result)
+        return ''.join(result)
 
 
 

@@ -50,14 +50,14 @@ class TestMetadata(TestCase):
     def test_get_title(self):
         meta = self.meta
         title = meta.get_title()
-        expected = u"Intitulé"
+        expected = "Intitulé"
         self.assertEqual(title, expected)
 
 
     def test_set_title(self):
         meta = self.meta
         clone = meta.clone()
-        title = u"Nouvel intitulé"
+        title = "Nouvel intitulé"
         clone.set_title(title)
         self.assertEqual(clone.get_title(), title)
 
@@ -65,14 +65,14 @@ class TestMetadata(TestCase):
     def test_get_description(self):
         meta = self.meta
         description = meta.get_description()
-        expected = u"Comments\nCommentaires\n评论"
+        expected = "Comments\nCommentaires\n评论"
         self.assertEqual(description, expected)
 
 
     def test_set_description(self):
         meta = self.meta
         clone = meta.clone()
-        description = u"评论\nnCommentaires\nComments"
+        description = "评论\nnCommentaires\nComments"
         clone.set_description(description)
         self.assertEqual(clone.get_description(), description)
 
@@ -80,14 +80,14 @@ class TestMetadata(TestCase):
     def test_get_subject(self):
         meta = self.meta
         subject = meta.get_subject()
-        expected = u"Sujet de sa majesté"
+        expected = "Sujet de sa majesté"
         self.assertEqual(subject, expected)
 
 
     def test_set_subject(self):
         meta = self.meta
         clone = meta.clone()
-        subject = u"Θέμα"
+        subject = "Θέμα"
         clone.set_subject(subject)
         self.assertEqual(clone.get_subject(), subject)
 
@@ -110,7 +110,7 @@ class TestMetadata(TestCase):
     def test_set_bad_language(self):
         meta = self.meta
         clone = meta.clone()
-        language = u"English"
+        language = "English"
         self.assertRaises(TypeError, clone.set_language, language)
 
 
@@ -168,7 +168,7 @@ class TestMetadata(TestCase):
     def test_set_initial_creator(self):
         meta = self.meta
         clone = meta.clone()
-        creator = u"Hervé"
+        creator = "Hervé"
         clone.set_initial_creator(creator)
         self.assertEqual(clone.get_initial_creator(), creator)
 
@@ -176,14 +176,14 @@ class TestMetadata(TestCase):
     def test_get_keywords(self):
         meta = self.meta
         keywords = meta.get_keywords()
-        expected = u"Mots-clés"
+        expected = "Mots-clés"
         self.assertEqual(keywords, expected)
 
 
     def test_set_keywords(self):
         meta = self.meta
         clone = meta.clone()
-        keywords = u"Nouveaux mots-clés"
+        keywords = "Nouveaux mots-clés"
         clone.set_keywords(keywords)
         self.assertEqual(clone.get_keywords(), keywords)
 
@@ -235,15 +235,15 @@ class TestMetadata(TestCase):
     def test_get_generator(self):
         meta = self.meta
         generator = meta.get_generator()
-        expected = (u"OpenOffice.org/3.1$Unix "
-                    u"OpenOffice.org_project/310m11$Build-9399")
+        expected = ("OpenOffice.org/3.1$Unix "
+                    "OpenOffice.org_project/310m11$Build-9399")
         self.assertEqual(generator, expected)
 
 
     def test_set_generator(self):
         meta = self.meta
         clone = meta.clone()
-        generator = u"lpOD Project"
+        generator = "lpOD Project"
         clone.set_generator(generator)
         self.assertEqual(clone.get_generator(), generator)
 
@@ -278,10 +278,10 @@ class TestMetadata(TestCase):
     def test_get_user_defined_metadata(self):
         meta = self.meta
         metadata = meta.get_user_defined_metadata()
-        expected = {u"Achevé à la date": datetime(2009, 7, 31),
-                    u"Numéro du document": Decimal("3"),
-                    u"Référence": True,
-                    u"Vérifié par": u"Moi-même"}
+        expected = {"Achevé à la date": datetime(2009, 7, 31),
+                    "Numéro du document": Decimal("3"),
+                    "Référence": True,
+                    "Vérifié par": "Moi-même"}
         self.assertEqual(metadata, expected)
 
 
@@ -291,24 +291,24 @@ class TestMetadata(TestCase):
         # A new value
         meta.set_user_defined_metadata('Prop5', 1)
         # Change a value
-        meta.set_user_defined_metadata(u"Référence", False)
-        expected = {u"Achevé à la date": datetime(2009, 7, 31),
-                    u"Numéro du document": Decimal("3"),
-                    u"Référence": False,
-                    u"Vérifié par": u"Moi-même",
-                    u'Prop5': Decimal('1')}
+        meta.set_user_defined_metadata("Référence", False)
+        expected = {"Achevé à la date": datetime(2009, 7, 31),
+                    "Numéro du document": Decimal("3"),
+                    "Référence": False,
+                    "Vérifié par": "Moi-même",
+                    'Prop5': Decimal('1')}
         metadata = meta.get_user_defined_metadata()
         self.assertEqual(metadata, expected)
 
 
     def test_get_user_defined_metadata_of_name(self):
         meta = self.meta
-        ref = u'Référence'
+        ref = 'Référence'
         metadata = meta.get_user_defined_metadata_of_name(ref)
         expected = {'name': ref,
-                    'text': u'true',
+                    'text': 'true',
                     'value': True,
-                    'value_type': u'boolean'}
+                    'value_type': 'boolean'}
         self.assertEqual(metadata, expected)
 
 if __name__ == '__main__':

@@ -59,14 +59,14 @@ class XmlPartTestCase(TestCase):
         # Testing a private but important method
         content = odf_xmlpart(ODF_CONTENT, self.container)
         tree = content._odf_xmlpart__get_tree()
-        self.assert_(isinstance(tree, _ElementTree))
+        self.assertTrue(isinstance(tree, _ElementTree))
         self.assertNotEqual(content._odf_xmlpart__tree, None)
 
 
     def test_root(self):
         content = odf_xmlpart(ODF_CONTENT, self.container)
         root = content.get_root()
-        self.assert_(isinstance(root, odf_element))
+        self.assertTrue(isinstance(root, odf_element))
         self.assertEqual(root.get_tag(), "office:document-content")
         self.assertNotEqual(content._odf_xmlpart__root, None)
 

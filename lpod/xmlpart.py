@@ -27,13 +27,13 @@
 
 # Import from the Standard Library
 from copy import deepcopy
-from cStringIO import StringIO
+from io import StringIO
 
 # Import from lxml
 from lxml.etree import parse, tostring
 
 # Import from lpod
-from element import _make_odf_element
+from .element import _make_odf_element
 #from utils import obsolete
 
 
