@@ -243,8 +243,6 @@ def __make_color_string(color=None):
     if color is None:
         color_string = color_default
     elif isinstance(color, str):
-        if isinstance(color, str):
-            color = color.encode("utf-8")
         color = color.strip()
         if not color:
             color = color_default
@@ -275,8 +273,6 @@ def make_table_cell_border_string(thick=None, line=None, color=None):
     if thick is None:
         thick_string = thick_default
     elif isinstance(thick, str):
-        if isinstance(thick, str):
-            thick = thick.encode("utf-8")
         thick = thick.strip()
         if thick:
             thick_string = thick
@@ -291,8 +287,6 @@ def make_table_cell_border_string(thick=None, line=None, color=None):
     if line is None:
         line_string = line_default
     elif isinstance(line, str):
-        if isinstance(line, str):
-            line = line.encode("utf-8")
         line = line.strip()
         if line:
             line_string = line
