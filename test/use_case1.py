@@ -60,7 +60,7 @@ body = document.get_body()
 
 for numero, filename in enumerate(listdir('samples')):
     # Heading
-    heading = odf_create_heading(1, text=str(filename, 'utf-8'))
+    heading = odf_create_heading(1, text=filename)
     body.append(heading)
     path = join('samples', filename)
     mimetype, _ = guess_type(path)
@@ -83,7 +83,7 @@ for numero, filename in enumerate(listdir('samples')):
 
         # And store the data
         container = document.container
-        container.set_part(internal_name, open(path).read())
+        container.set_part(internal_name, open(path, 'rb').read())
     elif mimetype in ('text/csv', 'text/comma-separated-values'):
         table = odf_create_table("table %d" % numero, style="Standard")
         csv = reader(open(path))
