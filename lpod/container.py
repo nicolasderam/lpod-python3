@@ -422,9 +422,9 @@ class odf_container(object):
 
             backup -- boolean
         """
-        if not isinstance(target, str):
-            encoding = sys.getfilesystemencoding()
-            target = target.decode(encoding)
+        #if not isinstance(target, str):
+        #    encoding = sys.getfilesystemencoding()
+        #    target = target.decode(encoding)
         parts = self.__parts
         # Packaging
         if packaging is None:
