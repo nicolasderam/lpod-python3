@@ -33,14 +33,13 @@ import re
 
 # Import from lxml
 from lxml.etree import fromstring, tostring, Element, _Element
-from lxml.etree import _ElementStringResult, _ElementUnicodeResult
+from lxml.etree import _ElementUnicodeResult
 from lxml.etree import XPath
 
 # Import from lpod
 from .datatype import DateTime, Boolean
 from .utils import _get_abspath, _get_elements, _get_element
 from .utils import _get_style_tagname, get_value  #, obsolete
-from .utils import _get_style_tagname, get_value
 
 
 ODF_NAMESPACES = {
@@ -1299,8 +1298,7 @@ class odf_element(object):
         elements = xpath_instance(element)
         result = []
         for obj in elements:
-            if (type(obj) is _ElementStringResult or
-                    type(obj) is _ElementUnicodeResult):
+            if isinstance(obj, _ElementUnicodeResult):
                 result.append(odf_text(obj))
             elif type(obj) is _Element:
                 result.append(_make_odf_element(obj))
