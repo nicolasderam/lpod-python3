@@ -184,7 +184,7 @@ class odf_document(object):
 
 
     def get_mimetype(self):
-        return self.get_part('mimetype')
+        return self.get_part('mimetype').decode('utf-8')
 
 
     def get_type(self):
