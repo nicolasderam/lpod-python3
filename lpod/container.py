@@ -30,7 +30,7 @@ import os
 import sys
 import shutil
 from copy import deepcopy
-from io import StringIO, BytesIO
+from io import BytesIO
 from zipfile import ZIP_DEFLATED, ZIP_STORED, ZipFile, BadZipfile
 
 # Import from lpod
@@ -81,6 +81,7 @@ class odf_container(object):
             self.__parts_ts = {'mimetype': timestamp}
         else:
             self.__data = data = file.read()
+            file.close()
             zip_expected = data[:4] == 'PK\x03\x04'
             # Most probably zipped document
             try:
