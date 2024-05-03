@@ -1349,6 +1349,7 @@ class odf_element(object):
         element = deepcopy(self.__element)
         data = tostring(element, with_tail=False,
                 pretty_print=pretty)
+        data = data.decode('utf-8')
         if not with_ns:
             # Remove namespaces
             data = ns_stripper.sub('', data)
