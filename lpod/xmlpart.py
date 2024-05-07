@@ -54,7 +54,8 @@ class odf_xmlpart(object):
         if self.__tree is None:
             container = self.container
             part = container.get_part(self.part_name)
-            self.__tree = parse(BytesIO(part))
+            io = BytesIO(part) if type(part) is bytes else StringIO(part)
+            self.__tree = parse(io)
         return self.__tree
 
 

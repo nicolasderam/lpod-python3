@@ -2245,7 +2245,7 @@ class odf_table(odf_element):
             if not row_values:
                 continue
             row = self.get_row(y, clone=True)
-            repeated =  row.get_repeated or 1
+            repeated =  row.get_repeated() or 1
             if repeated >= 2:
                 row.set_repeated(None)
             row.set_values(row_values, start=x, cell_type=cell_type,
@@ -2866,7 +2866,7 @@ class odf_table(odf_element):
             # Inside the defined table
             cell = self._get_row2_base(y).get_cell(x, clone=clone)
             if not keep_repeated:
-                repeated = cell.get_repeated or 1
+                repeated = cell.get_repeated() or 1
                 if repeated >= 2:
                     cell.set_repeated(None)
         cell.x = x
@@ -2983,7 +2983,7 @@ class odf_table(odf_element):
             if not row_cells:
                 continue
             row = self.get_row(y, clone=True)
-            repeated =  row.get_repeated or 1
+            repeated =  row.get_repeated() or 1
             if repeated >= 2:
                 row.set_repeated(None)
             row.set_cells(row_cells, start=x, clone=clone)
