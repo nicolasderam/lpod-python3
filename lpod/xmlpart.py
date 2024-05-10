@@ -27,7 +27,7 @@
 
 # Import from the Standard Library
 from copy import deepcopy
-from io import StringIO, BytesIO
+from io import BytesIO
 
 # Import from lxml
 from lxml.etree import parse, tostring
@@ -54,8 +54,9 @@ class odf_xmlpart(object):
         if self.__tree is None:
             container = self.container
             part = container.get_part(self.part_name)
-            io = BytesIO(part) if type(part) is bytes else StringIO(part)
-            self.__tree = parse(io)
+            if type(part) is str:
+                part = part.encode()
+            self.__tree = parse(BytesIO(part))
         return self.__tree
 
 
